@@ -1,0 +1,16 @@
+{
+  "name": "Playbot",
+  "short_name": "Playbot",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f4f1",
+  "theme_color": "#ff00a4",
+  "icons": [
+    {
+      "src": "css/Playbot-Favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
