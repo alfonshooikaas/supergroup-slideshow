@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="refresh" content="0; url=/" />
-  <title>Redirecting to Playbot</title>
-  <link rel="canonical" href="https://playbot.space/" />
+  <title>Redirecting to Supergroup</title>
   <script>
+    try {
+      sessionStorage.setItem("supergroupRedirectPath", window.location.pathname + window.location.search + window.location.hash);
+    } catch (error) {
+      // Continue with a plain redirect when sessionStorage is unavailable.
+    }
     window.location.replace("/");
   </script>
 </head>
 
 <body>
   <p>
-    Redirecting to <a href="/">Playbot</a>.
+    Redirecting to <a href="/">Supergroup</a>.
   </p>
 </body>
 </html>

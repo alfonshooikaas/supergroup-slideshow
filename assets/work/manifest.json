@@ -1,0 +1,795 @@
+[
+  {
+    "folder": "filosoof-jenever__filosoof-jenever__2015-ongoing__brand",
+    "client": "Filosoof Jenever",
+    "title": "Filosoof Jenever",
+    "period": "2015-ongoing",
+    "assets": [
+      {
+        "file": "000__supergroup__campaign__campaign-image-of-koshka.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "campaign",
+        "descriptor": "campaign image of koshka"
+      },
+      {
+        "file": "010__supergroup__result__logo.jpg",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "020__supergroup__result__bottle-design.jpg",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "bottle design"
+      },
+      {
+        "file": "030__supergroup__result__brand-book.jpg",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brand book"
+      }
+    ]
+  },
+  {
+    "folder": "mauritshuis__find-the-girl-with-the-pearl__2020-ongoing_wayfinding",
+    "client": "Mauritshuis",
+    "title": "Find The Girl With The Pearl",
+    "period": "2020-ongoing",
+    "assets": [
+      {
+        "file": "000__supergroup__result__signage-to-vermeer-girl-with-pearl.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "aignage to vermeer girl with pearl"
+      },
+      {
+        "file": "010__supergroup__result__signage-to-johan-maurits-painting.jpg",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage to johan maurits painting"
+      },
+      {
+        "file": "020__supergroup__result__signage-to-vermeer-girl-with-pearl.jpg",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage to vermeer girl with pearl"
+      },
+      {
+        "file": "030__supergroup__reference__historic-engraving-rembrand.jpeg",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "reference",
+        "descriptor": "historic engraving rembrand"
+      },
+      {
+        "file": "040__supergroup__reference__modern-engraving-technique.jpeg",
+        "nr": "040",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "reference",
+        "descriptor": "modern engraving technique"
+      },
+      {
+        "file": "050__supergroup__reference__modern-engraving-technique.jpeg",
+        "nr": "050",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "reference",
+        "descriptor": "modern engraving technique"
+      },
+      {
+        "file": "060__supergroup__study__signage-family.jpg",
+        "nr": "060",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "signage family"
+      },
+      {
+        "file": "070__supergroup__study__signage-family.jpg",
+        "nr": "070",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "signage family"
+      },
+      {
+        "file": "080__supergroup__study__signage-family.jpg",
+        "nr": "080",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "signage family"
+      }
+    ]
+  },
+  {
+    "folder": "nokk__nokk-spirits__2018-2024__brand",
+    "client": "Nokk",
+    "title": "Nokk Spirits",
+    "period": "2018-2024",
+    "assets": [
+      {
+        "file": "000__supergroup__campaign__campaign-image-of-nokk.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "campaign",
+        "descriptor": "campaign image of nokk"
+      },
+      {
+        "file": "005__supergroup__result__logo.mp4",
+        "nr": "005",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "010__supergroup__result__logo.jpg",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "020__supergroup__result__bottle-design.jpg",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "bottle design"
+      },
+      {
+        "file": "030__supergroup__result__posters.jpg",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "posters"
+      }
+    ]
+  },
+  {
+    "folder": "paleis-het-loo__royal-routing__2019-2023__wayfinding",
+    "client": "Paleis Het Loo",
+    "title": "Royal Routing",
+    "period": "2019-2023",
+    "assets": [
+      {
+        "file": "000__supergroup__result__signage-totem.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage totem"
+      },
+      {
+        "file": "010__supergroup__result__signage-map.jpg",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage map"
+      },
+      {
+        "file": "020__supergroup__reference__map.png",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "reference",
+        "descriptor": "map"
+      },
+      {
+        "file": "030__supergroup__detail__signage-map.jpg",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "detail",
+        "descriptor": "signage map"
+      },
+      {
+        "file": "040__supergroup__result__signage-palace.jpg",
+        "nr": "040",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage palace"
+      },
+      {
+        "file": "050__supergroup__result__signage-stables.jpg",
+        "nr": "050",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage stables"
+      },
+      {
+        "file": "060__supergroup__result__signage-bike.jpg",
+        "nr": "060",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage bike"
+      },
+      {
+        "file": "070__supergroup__result__signage-museum.jpg",
+        "nr": "070",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage museum"
+      },
+      {
+        "file": "080__supergroup__result__signage-cloakroom.jpg",
+        "nr": "080",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage cloakroom"
+      },
+      {
+        "file": "090__supergroup__study__carpet.png",
+        "nr": "090",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "carpet"
+      },
+      {
+        "file": "100__supergroup__study__tiles.png",
+        "nr": "100",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "tiles"
+      }
+    ]
+  },
+  {
+    "folder": "playnomore__barbie-x-playnomore__2016__brand",
+    "client": "Playnomore",
+    "title": "Barbie X Playnomore",
+    "period": "2016",
+    "assets": [
+      {
+        "file": "000__supergroup__campaign__campaign-on-streets-of-seoul.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "campaign",
+        "descriptor": "campaign on streets of seoul"
+      },
+      {
+        "file": "010__supergroup__result__campaign-film.mp4",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "campaign film"
+      },
+      {
+        "file": "020__supergroup__result__campaign-film.mp4",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "campaign film"
+      },
+      {
+        "file": "030__supergroup__result__campaign-film.mp4",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "campaign film"
+      }
+    ]
+  },
+  {
+    "folder": "polspotten__add-play-to-space__2019__brand",
+    "client": "Polspotten",
+    "title": "Add Play To Space",
+    "period": "2019",
+    "assets": [
+      {
+        "file": "000__supergroup__result__logo.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "010__supergroup__result__logo.png",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "020__supergroup__result__logo.jpg",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "030__supergroup__result__brochure.jpg",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "040__supergroup__result__brochure.jpg",
+        "nr": "040",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "050__supergroup__result__brochure.jpg",
+        "nr": "050",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "060__supergroup__result__brochure.jpg",
+        "nr": "060",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "070__supergroup__result__brochure.jpg",
+        "nr": "070",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "080__supergroup__result__brochure.jpg",
+        "nr": "080",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "090__supergroup__result__brochure.jpg",
+        "nr": "090",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "100__supergroup__result__brochure.jpg",
+        "nr": "100",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "110__supergroup__result__brochure.jpg",
+        "nr": "110",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "120__supergroup__result__brochure.jpg",
+        "nr": "120",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "brochure"
+      },
+      {
+        "file": "130__supergroup__result__posters.jpg",
+        "nr": "130",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "posters"
+      },
+      {
+        "file": "140__supergroup__result__website-menu.jpg",
+        "nr": "140",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "website menu"
+      }
+    ]
+  },
+  {
+    "folder": "stichting-ndsm-werf__permanent-temporary-activity__2015-ongoing__brand-wayfinding",
+    "client": "Stichting Ndsm Werf",
+    "title": "Permanent Temporary Activity",
+    "period": "2015-ongoing",
+    "assets": [
+      {
+        "file": "000__supergroup__model__3d-folly.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "model",
+        "descriptor": "3d folly"
+      },
+      {
+        "file": "001__supergroup__reference__nsm-logo.jpg",
+        "nr": "001",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "reference",
+        "descriptor": "nsm logo"
+      },
+      {
+        "file": "010__supergroup__result__logo.jpg",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "logo"
+      },
+      {
+        "file": "020__supergroup__result__2d-folly.png",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "2d folly"
+      },
+      {
+        "file": "030__supergroup__result__2d-folly.png",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "2d folly"
+      },
+      {
+        "file": "040__supergroup__reference__barrier-tape.jpeg",
+        "nr": "040",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "reference",
+        "descriptor": "barrier tape"
+      },
+      {
+        "file": "050__supergroup__strategy__barrier-tape-and-follies.jpg",
+        "nr": "050",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "strategy",
+        "descriptor": "barrier tape and follies"
+      },
+      {
+        "file": "060__supergroup__result__barrier-tape-and-follies.gif",
+        "nr": "060",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "barrier tape and follies"
+      },
+      {
+        "file": "070a__supergroup__result__3d-folly.png",
+        "nr": "070a",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "3d folly"
+      },
+      {
+        "file": "070b__supergroup__result__signage-identification.jpg",
+        "nr": "070b",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage identification"
+      },
+      {
+        "file": "090__supergroup__result__signage-descriptors.jpg",
+        "nr": "090",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage descriptors"
+      },
+      {
+        "file": "100__supergroup__result__signage-descriptors.jpg",
+        "nr": "100",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage descriptors"
+      },
+      {
+        "file": "110__supergroup__result__signage-descriptors.jpg",
+        "nr": "110",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage descriptors"
+      },
+      {
+        "file": "120__supergroup__result__signage-floor-patterns.jpg",
+        "nr": "120",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage floor patterns"
+      },
+      {
+        "file": "130__supergroup__result__signage-barriers.jpg",
+        "nr": "130",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage barriers"
+      },
+      {
+        "file": "140__supergroup__result__signage-barriers.jpg",
+        "nr": "140",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage barriers"
+      },
+      {
+        "file": "150__supergroup__system__signage-family.jpg",
+        "nr": "150",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "system",
+        "descriptor": "signage family"
+      },
+      {
+        "file": "160__supergroup__result__website-detail-page.jpg",
+        "nr": "160",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "website detail page"
+      },
+      {
+        "file": "170a__supergroup__result__website-now-on-show.png",
+        "nr": "170a",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "website now on show"
+      },
+      {
+        "file": "170b__supergroup__result__website-detail-page.png",
+        "nr": "170b",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "website detail page"
+      },
+      {
+        "file": "190__supergroup__result__website-augmented-reality-art.jpg",
+        "nr": "190",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "website augmented reality art"
+      }
+    ]
+  },
+  {
+    "folder": "supergroup__temporary-website__2026__art",
+    "client": "Supergroup",
+    "title": "Temporary Website",
+    "period": "2026",
+    "assets": [
+      {
+        "file": "00__all__cover__main-image.jpg",
+        "nr": "00",
+        "siteScope": [
+          "all"
+        ],
+        "role": "cover",
+        "descriptor": "main image"
+      },
+      {
+        "file": "01__supergroup__result__temporary-view.jpg",
+        "nr": "01",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "temporary view"
+      },
+      {
+        "file": "02__supergroup__system__spatial-system.jpg",
+        "nr": "02",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "system",
+        "descriptor": "spatial system"
+      }
+    ]
+  },
+  {
+    "folder": "unseen__windows-into-the-artists-world__2018-2022__brand-wayfinding",
+    "client": "Unseen",
+    "title": "Windows Into The Artists World",
+    "period": "2018-2022",
+    "assets": [
+      {
+        "file": "000__supergroup__result__signage-identification.jpg",
+        "nr": "000",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage identification"
+      },
+      {
+        "file": "010__supergroup__result__poster.jpg",
+        "nr": "010",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "poster"
+      },
+      {
+        "file": "020__supergroup__result__poster.jpg",
+        "nr": "020",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "poster"
+      },
+      {
+        "file": "030__supergroup__study__brand-expressions.jpg",
+        "nr": "030",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "brand expressions"
+      },
+      {
+        "file": "040__supergroup__study__brand-expressions.jpg",
+        "nr": "040",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "study",
+        "descriptor": "brand expressions"
+      },
+      {
+        "file": "050__supergroup__result__signage-identification.jpg",
+        "nr": "050",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage identification"
+      },
+      {
+        "file": "060__supergroup__result__signage-animated.jpg",
+        "nr": "060",
+        "siteScope": [
+          "supergroup"
+        ],
+        "role": "result",
+        "descriptor": "signage animated"
+      },
+      {
+        "file": "070__supergroup+pilotgroup__model__incubator-strategy.jpg",
+        "nr": "070",
+        "siteScope": [
+          "supergroup",
+          "pilotgroup"
+        ],
+        "role": "model",
+        "descriptor": "incubator strategy"
+      }
+    ]
+  }
+]
