@@ -1048,10 +1048,9 @@ function parseProjectStoryMarkdown(markdown) {
     title: "",
     complexity: "",
     clarity: "",
-    idea: "",
     work: []
   };
-  const fieldNames = new Set(["title", "complexity", "clarity", "idea", "work"]);
+  const fieldNames = new Set(["title", "complexity", "clarity", "work"]);
   let currentField = "";
 
   String(markdown || "")
@@ -1101,7 +1100,6 @@ function getFallbackProjectStory(asset) {
     title: folderData.projectTitle,
     complexity: "",
     clarity: "",
-    idea: "",
     work: []
   };
 }
@@ -1151,30 +1149,6 @@ async function fetchProjectStory(projectKey) {
   return storyPromise;
 }
 
-function getProjectStoryImages(folder) {
-  const preferredRoles = ["reference", "diagram"];
-  const storyImages = [];
-  const seenFiles = new Set();
-
-  preferredRoles.forEach((role) => {
-    slideshowAssets.forEach((item) => {
-      const assets = item.pairAssets?.length ? item.pairAssets : [getStoryAsset(item)];
-
-      assets.forEach((asset) => {
-        if (!asset || storyImages.length >= 2) return;
-        if (asset.folder !== folder || asset.mediaType !== "image") return;
-        if ((asset.role || asset.assetRole) !== role) return;
-        if (seenFiles.has(asset.file)) return;
-
-        seenFiles.add(asset.file);
-        storyImages.push(asset);
-      });
-    });
-  });
-
-  return storyImages;
-}
-
 function createStorySection(title, text) {
   if (!text) return null;
 
@@ -1191,44 +1165,36 @@ function createStorySection(title, text) {
 function createMenu2StoryElement(story, asset) {
   const representative = getStoryAsset(asset);
   const folder = representative?.folder || asset?.folder || "";
+  const folderData = parseFolderDisplayData(folder, {
+    client: representative?.client || asset?.client,
+    title: representative?.title || asset?.title,
+    period: representative?.period || asset?.period
+  });
   const storyElement = document.createElement("div");
   const title = document.createElement("h2");
+  const meta = document.createElement("p");
   const sections = [
     createStorySection("Complexity", story.complexity),
-    createStorySection("Clarity", story.clarity),
-    createStorySection("Idea", story.idea)
+    createStorySection("Clarity", story.clarity)
   ].filter(Boolean);
-  const storyImages = getProjectStoryImages(folder);
-  const results = createStorySection("Results", getAssetDescription(asset));
-  const resultsCaption = results?.querySelector("p");
+  const item = createStorySection("Item", getAssetDescription(asset));
+  const itemCaption = item?.querySelector("p");
 
   storyElement.className = "menu2-story";
   storyElement.dataset.folder = folder;
   title.className = "menu2-story-title";
-  title.textContent = story.title || getFallbackProjectStory(asset).title;
-  storyElement.append(title, ...sections);
+  title.textContent = folderData.projectTitle;
+  meta.className = "menu2-story-meta";
+  meta.textContent = [
+    `${folderData.x} for ${folderData.client}`,
+    folderData.period
+  ].filter(Boolean).join(", ");
+  storyElement.append(title, meta, ...sections);
 
-  if (storyImages.length) {
-    const imageGrid = document.createElement("div");
-    imageGrid.className = "menu2-story-images";
-    imageGrid.classList.toggle("has-one-image", storyImages.length === 1);
-
-    storyImages.forEach((imageAsset) => {
-      const image = document.createElement("img");
-      image.src = imageAsset.src;
-      image.alt = imageAsset.alt || imageAsset.descriptor || "Project reference";
-      image.loading = "lazy";
-      image.decoding = "async";
-      imageGrid.append(image);
-    });
-
-    storyElement.append(imageGrid);
-  }
-
-  if (results && resultsCaption) {
-    results.classList.add("menu2-results");
-    resultsCaption.className = "menu2-results-caption";
-    storyElement.append(results);
+  if (item && itemCaption) {
+    item.classList.add("menu2-item");
+    itemCaption.className = "menu2-item-caption";
+    storyElement.append(item);
   }
 
   return storyElement;
@@ -1259,10 +1225,37 @@ function setMenu2V1Visible(isVisible) {
   }
 }
 
-function updateMenu2StoryResults(asset) {
-  const caption = menu2SlideshowMode.querySelector(".menu2-results-caption");
+function updateMenu2StoryItem(asset, direction = "forward") {
+  const caption = menu2SlideshowMode.querySelector(".menu2-item-caption");
   if (!caption) return;
-  caption.textContent = getAssetDescription(asset);
+
+  const nextText = getAssetDescription(asset);
+  if (caption.textContent === nextText) return;
+
+  const normalizedDirection = normalizeMetadataDirection(direction);
+  caption.classList.remove(
+    "item-enter-forward",
+    "item-enter-backward",
+    "item-exit-forward",
+    "item-exit-backward",
+    "is-active"
+  );
+  caption.classList.add(`item-exit-${normalizedDirection}`);
+
+  metadataAnimationTimers.push(window.setTimeout(() => {
+    caption.textContent = nextText;
+    caption.classList.remove(`item-exit-${normalizedDirection}`);
+    caption.classList.add(`item-enter-${normalizedDirection}`);
+    void caption.offsetWidth;
+
+    window.requestAnimationFrame(() => {
+      caption.classList.add("is-active");
+    });
+
+    metadataAnimationTimers.push(window.setTimeout(() => {
+      caption.classList.remove(`item-enter-${normalizedDirection}`, "is-active");
+    }, 220));
+  }, 160));
 }
 
 async function updateMenu2Story(direction = "forward", options = {}) {
@@ -1282,16 +1275,16 @@ async function updateMenu2Story(direction = "forward", options = {}) {
   });
 
   if (previousProjectKey === projectKey && viewport.querySelector(".menu2-story")) {
-    console.log("[Menu2 V2] updating results only");
-    updateMenu2StoryResults(asset);
-    metadataPanel.dataset.storyResult = getAssetDescription(asset);
+    console.log("[Menu2 V2] updating item only");
+    updateMenu2StoryItem(asset, direction);
+    metadataPanel.dataset.storyItem = getAssetDescription(asset);
     return;
   }
 
   console.log("[Menu2 V2] updating full story");
   currentMenu2V2ProjectKey = projectKey;
   metadataPanel.dataset.storyFolder = projectKey;
-  metadataPanel.dataset.storyResult = getAssetDescription(asset);
+  metadataPanel.dataset.storyItem = getAssetDescription(asset);
 
   const requestToken = projectStoryRequestToken + 1;
   projectStoryRequestToken = requestToken;
@@ -1806,7 +1799,7 @@ function activateMenu2Version(version) {
   setMenu2Version(version);
   updateMenu2VersionToggleState();
   metadataPanel.dataset.storyFolder = "";
-  metadataPanel.dataset.storyResult = "";
+  metadataPanel.dataset.storyItem = "";
   currentMenu2V2ProjectKey = null;
 
   if (currentMenu2Mode === "slideshow") {
