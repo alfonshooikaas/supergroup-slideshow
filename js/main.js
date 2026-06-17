@@ -62,7 +62,6 @@ const INFO_MENU_ANCHORS = [
 const TEMPORARY_INFO_MENU_ANCHORS = [
   { id: "about", label: "About" },
   { id: "practice", label: "Clients" },
-  { id: "in-conjunction", label: "Architecture" },
   { id: "recognition", label: "Recognition" },
   { id: "partners", label: "Partners" }
 ];
@@ -154,11 +153,6 @@ PLAYNOMORE, Seoul
 Energy & Industry
 AVR Energy, Netherlands
 LOOC eCloud, Netherlands`;
-const TEMPORARY_INFO_CONJUNCTION_TEXT = `We often work alongside architectural practices such as
-Mecanoo
-KAAN Architecten
-Neutelings Riedijk Architects
-Robert van Oosterom`;
 const TEMPORARY_INFO_STATIC_CONTENT = {
   publications: `Publications
 
@@ -204,8 +198,7 @@ TU Delft / Berlage Institute`,
   partners: `Long-term Partners
 
 Studiostaak | https://www.studiostaak.nl/
-AABB | https://aabb-commits.github.io/os/
-Beyond Space | https://beyond-space.eu/`,
+AABB | https://aabb-commits.github.io/os/`,
   brands: `Brands & Labels
 
 Emblemmatic | https://emblemmatic.org/
@@ -334,7 +327,6 @@ const infoKoreanContent = document.getElementById("infoKoreanContent");
 const infoTemporaryEnvironmentsContent = document.getElementById("infoTemporaryEnvironmentsContent");
 const infoTemporaryCtaContent = document.getElementById("infoTemporaryCtaContent");
 const infoClientsContent = document.getElementById("infoClientsContent");
-const infoTemporaryConjunctionContent = document.getElementById("infoTemporaryConjunctionContent");
 const infoPublicationsContent = document.getElementById("infoPublicationsContent");
 const infoExhibitionsContent = document.getElementById("infoExhibitionsContent");
 const infoLecturesContent = document.getElementById("infoLecturesContent");
@@ -906,7 +898,6 @@ function renderDefaultInfoPage(content) {
   ].forEach((target) => setInfoSectionVisible(target, true));
   setInfoSectionVisible(infoTemporaryEnvironmentsContent, false);
   setInfoSectionVisible(infoTemporaryCtaContent, false);
-  setInfoSectionVisible(infoTemporaryConjunctionContent, false);
 }
 
 function renderTemporaryInfoPage(content) {
@@ -919,11 +910,6 @@ function renderTemporaryInfoPage(content) {
       "Commercial & Brand",
       "Energy & Industry"
     ]
-  });
-  renderPlainTextIndex(infoTemporaryConjunctionContent, TEMPORARY_INFO_CONJUNCTION_TEXT, {
-    hiddenFirstLine: "We often work alongside architectural practices such as",
-    rowClassName: "info-simple-row",
-    spacerClassName: "info-simple-spacer"
   });
   renderPublicationIndex(infoPublicationsContent, content.publications, {
     hiddenFirstLine: "Publications"
@@ -959,8 +945,7 @@ function renderTemporaryInfoPage(content) {
   [
     infoTemporaryEnvironmentsContent,
     infoTemporaryCtaContent,
-    infoClientsContent,
-    infoTemporaryConjunctionContent,
+    infoClientsContent
   ].forEach((target) => setInfoSectionVisible(target, true));
   setInfoSectionVisible(infoPublicationsContent, Boolean(content.publications));
   setInfoSectionVisible(infoExhibitionsContent, Boolean(content.exhibitions));
