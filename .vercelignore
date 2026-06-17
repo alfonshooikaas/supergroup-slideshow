@@ -1,0 +1,2 @@
+# Exclude full slideshow work assets from temporary Vercel deploy
+assets/work/

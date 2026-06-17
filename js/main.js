@@ -1,9 +1,14 @@
 const SITE_URL = "https://super-group.eu";
-const MANIFEST_URL = "/assets/work/manifest.json?v=20260606-media-support";
+const SITE_MODE_STORAGE_KEY = "siteMode";
+const TEMPORARY_WEBSITE = getInitialTemporaryWebsiteMode();
+const MANIFEST_URL = "/assets/work/manifest.json?v=20260608-v2-compact-story";
 const LOGO_MANIFEST_URL = "/info/logos/manifest.json?v=20260606-asset-structure";
-const INFO_MARKDOWN_VERSION = "20260608-info-page-final";
+const INFO_MARKDOWN_VERSION = "20260608-experience-links";
 const FLOCKING_LOGO_URL = "/assets/supergroup/supergroup-logo.svg";
 const MENU_2_VERSION_STORAGE_KEY = "supergroup_menu2_version";
+const INTRO_VOCABULARY_URL = "/assets/vocabulary/vocabulary.json?v=20260609-no-wrap";
+const VOCAB_ANIMATION_VERSION_STORAGE_KEY = "supergroup_vocab_animation_version";
+const MATERIAL_SYMBOLS_STYLESHEET_URL = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap";
 const INCLUDED_SCOPES = new Set(["all", "supergroup"]);
 const CONTAINED_ROLES = new Set(["system", "strategy", "diagram", "study", "model", "presentation"]);
 const FULLSCREEN_ROLES = new Set(["cover", "result", "campaign", "detail"]);
@@ -39,17 +44,276 @@ const FLOCKING_LOGO_SETTINGS = {
   spreadPhase: 220,
   regroupPhase: 530
 };
+const INTRO_VOCABULARY_FALLBACK = {
+  firstPhrase: ["Navigating", "complex", "environments"],
+  verbs: {
+    primary: ["Navigating"],
+    alternative: ["Mapping"]
+  },
+  adjectives: ["complex"],
+  nouns: ["environments"]
+};
 const INFO_MENU_ANCHORS = [
   { id: "about", label: "About" },
   { id: "practice", label: "Practice" },
   { id: "recognition", label: "Recognition" },
   { id: "partners", label: "Partners" }
 ];
+const TEMPORARY_INFO_MENU_ANCHORS = [
+  { id: "about", label: "About" },
+  { id: "practice", label: "Clients" },
+  { id: "in-conjunction", label: "Architecture" },
+  { id: "recognition", label: "Recognition" },
+  { id: "partners", label: "Partners" }
+];
+const TEMPORARY_INFO_PRIMARY_TEXT = `Complexity is everywhere.
+
+Supergroup is a design studio for complex environments.
+We use design to make organisations, information, brands, buildings and systems easier to understand, navigate and use.
+
+Our work moves between brand identity, signage, wayfinding, spatial graphics, digital design and visual strategy - often in close relation to architecture, real estate and public space.
+
+From complexity to clarity, through design.`;
+const TEMPORARY_INFO_ENVIRONMENTS = [
+  {
+    title: "Complex environments",
+    description: "Strategy, systems and clarity"
+  },
+  {
+    title: "Spatial environments",
+    description: "Wayfinding, graphics and interventions"
+  },
+  {
+    title: "Digital environments",
+    description: "Websites, interfaces and information"
+  },
+  {
+    title: "Brand environments",
+    description: "Identity, language and visual systems"
+  }
+];
+const TEMPORARY_INFO_CTA_TEXT = "For inquiries, collaborations or project requests: hello@super-group.eu or +31 (0)6 47 123 556.";
+const TEMPORARY_INFO_CLIENTS_TEXT = `Selected Clients
+
+Culture & Knowledge
+Amsterdam Museum, Amsterdam
+Beeld en Geluid, Hilversum
+Centraal Museum, Utrecht
+De Appel, Amsterdam
+De Fundering, Amsterdam
+Jan van Eyck Academie, Maastricht
+Kunsthal, Rotterdam
+Mauritshuis, Den Haag
+NDSM Werf, Amsterdam
+Nationaal Glasmuseum, Leerdam
+Paleis Het Loo, Apeldoorn
+Rotterdamse Academie voor Bouwkunst, Rotterdam
+Spoorwegmuseum, Utrecht
+Stedelijk Museum, Amsterdam
+Stedelijk Museum, Alkmaar
+Theater De Veste, Delft
+Unseen, Amsterdam
+Van Abbemuseum, Eindhoven
+
+Public & Institutional
+Gemeente Amsterdam, Amsterdam
+PostNL, Netherlands
+TU Delft, Delft
+Universiteit van Amsterdam, Amsterdam
+UNESCO
+WHO
+ZonMw, Den Haag
+
+Architecture & Place
+Beyond Space Architects
+Braaksma & Roos Architectenbureau
+Civic Architects
+G&S&
+INSPIRA developers
+KondorWessels Vastgoed
+NEOO Developers
+Raumplan Architects
+Stadsherstel
+Superlofts
+Vereniging Deltametropool
+XML Architects
+
+Commercial & Brand
+Ace & Tate, Amsterdam
+BBC, Amsterdam / London
+Buddelship, Hamburg
+DPG Media, Amsterdam
+Filosoof Jenever, Hamburg
+Karl Lagerfeld Jeans, Global
+Marktplaats, Amsterdam
+Morentz, Waalwijk
+NearSt, London
+Neoderma, Amsterdam
+PLAYNOMORE, Seoul
+
+Energy & Industry
+AVR Energy, Netherlands
+LOOC eCloud, Netherlands`;
+const TEMPORARY_INFO_CONJUNCTION_TEXT = `We often work alongside architectural practices such as
+Mecanoo
+KAAN Architecten
+Neutelings Riedijk Architects
+Robert van Oosterom`;
+const TEMPORARY_INFO_STATIC_CONTENT = {
+  publications: `Publications
+
+Allure Korea | https://www.allurekorea.com/2017/02/02/%ED%98%91%EC%97%85-%EC%95%84%EC%9D%B4%ED%85%9C%EC%9C%BC%EB%A1%9C-%EC%A3%BC%EB%AA%A9%EB%B0%9B%EB%8A%94-%ED%94%8C%EB%A0%88%EC%9D%B4-%EB%85%B8%EB%AA%A8%EC%96%B4%EC%99%80-sjyp/
+Architectenweb | https://architectenweb.nl/nieuws/artikel.aspx?id=48039
+BBC | https://www.bbc.co.uk/programmes/b006mjxb
+De Groene Amsterdammer | https://www.groene.nl/artikel/recht-voor-zijn-raap--2
+Designboom | https://www.designboom.com/architecture/xml-bright-red-signage-facilitate-orientation-parking-garage-amsterdam-08-26-2020/
+Design Museum London | https://designmuseum.org/exhibitions/redesign-of-the-uk-passport/
+Dezeen | https://www.dezeen.com/2017/07/06/design-museum-london-exhibition-dezeen-brexit-passport-competition-winners/
+Domus | https://www.domusweb.it/en/news/2016/06/10/european_council_xml.html
+Fast Company | https://www.fastcompany.com/3047547/why-cant-the-us-governments-graphic-design-be-this-beautiful/
+Frameweb | https://frameweb.com/project/ace-tate-van-woustraat-store-amsterdam
+Hypebeast | https://hypebeast.com/2016/4/mark-maker
+Inc. | https://www.inc.com/kevin-j-ryan/need-a-startup-logo-this-machine-will-design-one-for-you.html
+It's Nice That | https://www.itsnicethat.com/news/markmaker-logo-generator-algorithm-140416
+Lifehacker Japan | https://www.lifehacker.jp/article/160419markmaker/
+The Guardian | https://www.facebook.com/theguardian/videos/brexit-passport-design-competition/664746173713149/
+Volkskrant | https://www.volkskrant.nl/cultuur-media/jonge-kunstenaars-met-knellend-thema~babae044/`,
+  exhibitions: `Exhibitions
+
+BOZAR, Brussels
+Centraal Museum Utrecht
+Design Museum London
+Festival de l'Affiche de Chaumont
+Graphic Design Festival Breda
+Graphic Design Festival Glasgow
+Lothringer13 Halle, Munich
+Malta Design Week
+Museum Arnhem
+Serralves Foundation, Porto`,
+  lectures: `Lectures & Teaching
+
+ArtEZ Arnhem
+Design Academy Eindhoven
+Dongdaemun Design Plaza, Seoul
+HKU Utrecht
+Nieuwe Instituut, Rotterdam
+Premsela Institute for Design
+Sandberg Instituut, Amsterdam
+St. Joost School of Art & Design
+TU Delft / Berlage Institute`,
+  partners: `Long-term Partners
+
+Studiostaak | https://www.studiostaak.nl/
+AABB | https://aabb-commits.github.io/os/
+Beyond Space | https://beyond-space.eu/`,
+  brands: `Brands & Labels
+
+Emblemmatic | https://emblemmatic.org/
+Goldilocks
+Hooikaas
+Pilotgroup
+Playbot | https://playbot.space
+ReMedi
+Storybuilders`,
+  experience: `Built on Experience
+
+Built on experience gained through projects, collaborations and roles across cultural, public and commercial organisations.
+
+2x4|https://2x4.org/
+Fondazione Prada
+Prada
+Miu Miu
+Harrods
+Nike
+Samsung
+Hyundai Motors
+MoMA PS1
+New York Public Library
+Qatar Museums Authority
+
+Gretel|https://gretelny.com/
+21st Century Fox
+Kickstarter
+WeWork
+MTV Global
+Noma
+
+Project Projects, New York|https://www.wkshps.com/
+Columbia University GSAPP
+Jewish Museum
+Seattle Art Fair
+
+Total Design|https://www.totaldesign.com/
+De Nederlandsche Bank
+Royal FloraHolland
+
+Nick Bell Design|https://nickbelldesign.co.uk/
+Eye Magazine
+Imperial War Museum`,
+  contact: `Contact
+
+alfons@super-group.eu
++31 (0)6 47 123 556
+
+Weesperzijde 33V
+1091 ED Amsterdam
+The Netherlands`
+};
+const TEMPORARY_CONTACT_EMAIL = "hello@super-group.eu";
+const TEMPORARY_NOTICE_LINK_LABEL = TEMPORARY_CONTACT_EMAIL;
+
+function isProductionHost() {
+  const hostname = window.location.hostname;
+
+  return (
+    hostname === "super-group.eu" ||
+    hostname === "www.super-group.eu" ||
+    hostname.endsWith(".vercel.app")
+  );
+}
+
+function isIndexLikePath() {
+  const path = window.location.pathname;
+  return path === "/" || path.endsWith("/index.html");
+}
+
+function getInitialTemporaryWebsiteMode() {
+  try {
+    if (isProductionHost()) {
+      window.localStorage.setItem(SITE_MODE_STORAGE_KEY, "temporary");
+      return true;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+
+    if (mode === "temp" || mode === "temporary") {
+      window.localStorage.setItem(SITE_MODE_STORAGE_KEY, "temporary");
+      return true;
+    }
+
+    if (mode === "full") {
+      window.localStorage.setItem(SITE_MODE_STORAGE_KEY, "full");
+      return false;
+    }
+
+    if (isIndexLikePath()) return true;
+
+    const savedMode = window.localStorage.getItem(SITE_MODE_STORAGE_KEY);
+    if (savedMode === "full") return false;
+    if (savedMode === "temporary") return true;
+  } catch (error) {
+    return true;
+  }
+
+  return true;
+}
 
 const slideshow = document.getElementById("supergroupSlideshow");
 const navPanel = document.getElementById("supergroup-island-panel");
 const metadataPanel = document.getElementById("supergroup-meta-panel");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
+const temporaryInfoButton = document.querySelector(".temporary-info-button");
 const slideshowToggle = document.getElementById("slideshowToggle");
 const slideshowToggleIcon = document.getElementById("slideshowToggleIcon");
 const disciplineWord = document.getElementById("disciplineWord");
@@ -67,7 +331,10 @@ const aboutClose = document.getElementById("aboutClose");
 const infoEnglishContent = document.getElementById("infoEnglishContent");
 const infoDutchContent = document.getElementById("infoDutchContent");
 const infoKoreanContent = document.getElementById("infoKoreanContent");
+const infoTemporaryEnvironmentsContent = document.getElementById("infoTemporaryEnvironmentsContent");
+const infoTemporaryCtaContent = document.getElementById("infoTemporaryCtaContent");
 const infoClientsContent = document.getElementById("infoClientsContent");
+const infoTemporaryConjunctionContent = document.getElementById("infoTemporaryConjunctionContent");
 const infoPublicationsContent = document.getElementById("infoPublicationsContent");
 const infoExhibitionsContent = document.getElementById("infoExhibitionsContent");
 const infoLecturesContent = document.getElementById("infoLecturesContent");
@@ -83,6 +350,7 @@ const contactToggle = document.getElementById("contactToggle");
 const contactBlob = document.getElementById("contactBlob");
 const homeLogoButton = document.getElementById("homeLogoButton");
 const menu2VersionToggle = document.getElementById("menu2VersionToggle");
+const vocabAnimationToggle = document.getElementById("vocabAnimationToggle");
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let slides = [];
@@ -106,22 +374,36 @@ let metadataAnimationTimers = [];
 let infoSectionObserver = null;
 let infoSectionScrollHandler = null;
 let flockingLogoController = null;
+let introVocabularyCleanup = null;
 let projectStoryRequestToken = 0;
 let currentMenu2Version = getMenu2Version();
-let currentMenu2V2ProjectKey = null;
+let currentVocabAnimationVersion = getVocabAnimationVersion();
+let currentMenu2StoryProjectKey = null;
+let temporaryIntroFirstWordPickCount = 0;
+let temporaryLogoParticleController = null;
+let temporaryFloatingFaviconController = null;
+let hasRenderedTemporaryInfoPage = false;
 const projectStoryCache = new Map();
+
+function isTemporaryWebsiteActive() {
+  return TEMPORARY_WEBSITE === true;
+}
+
+function isFullMode() {
+  return !isTemporaryWebsiteActive();
+}
 
 function getMenu2Version() {
   try {
     const version = window.localStorage.getItem(MENU_2_VERSION_STORAGE_KEY);
-    return version === "v2" ? "v2" : "v1";
+    return version === "v2" || version === "v3" || version === "v4" ? version : "v1";
   } catch (error) {
     return "v1";
   }
 }
 
 function setMenu2Version(version) {
-  const normalizedVersion = version === "v2" ? "v2" : "v1";
+  const normalizedVersion = version === "v2" || version === "v3" || version === "v4" ? version : "v1";
 
   try {
     window.localStorage.setItem(MENU_2_VERSION_STORAGE_KEY, normalizedVersion);
@@ -130,6 +412,27 @@ function setMenu2Version(version) {
   }
 
   currentMenu2Version = normalizedVersion;
+}
+
+function getVocabAnimationVersion() {
+  try {
+    const version = window.localStorage.getItem(VOCAB_ANIMATION_VERSION_STORAGE_KEY);
+    return ["v2", "v3a", "v3b", "v3c"].includes(version) ? version : "v1";
+  } catch (error) {
+    return "v1";
+  }
+}
+
+function setVocabAnimationVersion(version) {
+  const normalizedVersion = ["v2", "v3a", "v3b", "v3c"].includes(version) ? version : "v1";
+
+  try {
+    window.localStorage.setItem(VOCAB_ANIMATION_VERSION_STORAGE_KEY, normalizedVersion);
+  } catch (error) {
+    // localStorage can be unavailable in some privacy contexts.
+  }
+
+  currentVocabAnimationVersion = normalizedVersion;
 }
 
 function setContactBlobOpen(isOpen) {
@@ -293,6 +596,8 @@ function renderPublicationIndex(target, text, options = {}) {
 }
 
 function appendExternalLinkIcon(link) {
+  loadMaterialSymbolsIfNeeded();
+
   const icon = document.createElement("span");
   icon.className = "material-symbols-outlined info-external-link-icon";
   icon.setAttribute("aria-hidden", "true");
@@ -357,15 +662,17 @@ function renderLinkedTextIndex(target, text, options = {}) {
   });
 }
 
-function renderContactIndex(target, text, options = {}) {
+function renderExperienceIndex(target, text, options = {}) {
   if (!target) return;
 
   const hiddenFirstLine = options.hiddenFirstLine || "";
+  const groupHeadings = new Set(options.groupHeadings || []);
   const lines = String(text || "")
     .replace(/\r\n?/g, "\n")
     .split("\n");
-  const blocks = [];
-  let currentBlock = [];
+  let hasRenderedIntro = false;
+  let hasRenderedRow = false;
+  let pendingSpacer = false;
 
   target.textContent = "";
 
@@ -377,6 +684,67 @@ function renderContactIndex(target, text, options = {}) {
       trimmedLine.toLowerCase() === hiddenFirstLine.toLowerCase();
 
     if (isHiddenHeading) return;
+    if (!trimmedLine) {
+      if (hasRenderedRow) pendingSpacer = true;
+      return;
+    }
+
+    if (!hasRenderedIntro) {
+      const intro = document.createElement("div");
+      intro.className = "info-experience-row info-experience-intro";
+      intro.textContent = trimmedLine;
+      target.append(intro);
+      hasRenderedIntro = true;
+      hasRenderedRow = true;
+      pendingSpacer = false;
+      return;
+    }
+
+    const [label, url] = trimmedLine.split("|").map((part) => part.trim());
+    const isHeading = groupHeadings.has(label || trimmedLine);
+
+    if (pendingSpacer && !isHeading) {
+      const spacer = document.createElement("div");
+      spacer.className = "info-experience-spacer";
+      target.append(spacer);
+    }
+    pendingSpacer = false;
+
+    const row = document.createElement("div");
+    row.className = "info-experience-row";
+    row.classList.toggle("is-group-heading", isHeading);
+
+    if (url) {
+      const link = document.createElement("a");
+      link.className = "info-text-link";
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = label;
+      appendExternalLinkIcon(link);
+      row.append(link);
+    } else {
+      row.textContent = label || trimmedLine;
+    }
+
+    target.append(row);
+    hasRenderedRow = true;
+  });
+}
+
+function renderContactIndex(target, text) {
+  if (!target) return;
+
+  const lines = String(text || "")
+    .replace(/\r\n?/g, "\n")
+    .split("\n");
+  const blocks = [];
+  let currentBlock = [];
+
+  target.textContent = "";
+
+  lines.forEach((line) => {
+    const trimmedLine = line.trim();
 
     if (!trimmedLine) {
       if (currentBlock.length) {
@@ -391,7 +759,25 @@ function renderContactIndex(target, text, options = {}) {
 
   if (currentBlock.length) blocks.push(currentBlock);
 
-  blocks.forEach((block) => {
+  const logoColumn = document.createElement("div");
+  logoColumn.className = "info-contact-block info-contact-logo-block";
+
+  const logo = document.createElement("img");
+  logo.className = "info-contact-logo";
+  logo.src = "/assets/supergroup/supergroup-symbol.svg";
+  logo.alt = "Supergroup";
+
+  logoColumn.append(logo);
+  target.append(logoColumn);
+
+  const footerColumns = [
+    [...(blocks[0] || []), ...(blocks[1] || [])],
+    ...(blocks.length > 2 ? blocks.slice(2) : [])
+  ];
+
+  footerColumns.forEach((block) => {
+    if (!block.length) return;
+
     const column = document.createElement("div");
     column.className = "info-contact-block";
 
@@ -404,7 +790,190 @@ function renderContactIndex(target, text, options = {}) {
   });
 }
 
+function renderTemporaryInfoCta(target) {
+  if (!target) return;
+
+  target.textContent = "";
+
+  const [prefixText] = TEMPORARY_INFO_CTA_TEXT.split("hello@super-group.eu");
+  const prefix = document.createTextNode(prefixText);
+  const emailLink = document.createElement("a");
+  const phoneLink = document.createElement("a");
+
+  emailLink.href = "mailto:hello@super-group.eu";
+  emailLink.textContent = "hello@super-group.eu";
+
+  phoneLink.href = "tel:+31647123556";
+  phoneLink.textContent = "+31 (0)6 47 123 556";
+
+  target.append(
+    prefix,
+    document.createElement("br"),
+    emailLink,
+    document.createTextNode(" or "),
+    phoneLink,
+    document.createTextNode(".")
+  );
+}
+
+function renderTemporaryEnvironments(target) {
+  if (!target) return;
+
+  target.textContent = "";
+  target.classList.add("info-environments-grid");
+
+  TEMPORARY_INFO_ENVIRONMENTS.forEach((environment) => {
+    const item = document.createElement("div");
+    const title = document.createElement("h3");
+    const description = document.createElement("p");
+
+    item.className = "info-environment-item";
+    title.className = "info-environment-title";
+    description.className = "info-environment-description";
+    title.textContent = environment.title;
+    description.textContent = environment.description;
+
+    item.append(title, description);
+    target.append(item);
+  });
+}
+
+function setInfoSectionVisible(target, isVisible) {
+  const section = target?.closest(".info-section");
+  if (section) section.hidden = !isVisible;
+}
+
+function getInfoMenuAnchors() {
+  return isTemporaryWebsiteActive() ? TEMPORARY_INFO_MENU_ANCHORS : INFO_MENU_ANCHORS;
+}
+
+function renderDefaultInfoPage(content) {
+  renderMarkdown(infoEnglishContent, content.english);
+  renderMarkdown(infoDutchContent, content.dutch);
+  renderMarkdown(infoKoreanContent, content.korean);
+  renderPlainTextIndex(infoClientsContent, content.clients, {
+    hiddenFirstLine: "Selected Clients",
+    groupHeadings: [
+      "Culture & Knowledge",
+      "Public & Institutional",
+      "Architecture & Place",
+      "Commercial & Brand",
+      "Energy & Industry"
+    ]
+  });
+  renderPublicationIndex(infoPublicationsContent, content.publications, {
+    hiddenFirstLine: "Publications"
+  });
+  renderPlainTextIndex(infoExhibitionsContent, content.exhibitions, {
+    hiddenFirstLine: "Exhibitions",
+    rowClassName: "info-simple-row",
+    spacerClassName: "info-simple-spacer"
+  });
+  renderPlainTextIndex(infoLecturesContent, content.lectures, {
+    hiddenFirstLine: "Lectures & Teaching",
+    rowClassName: "info-simple-row",
+    spacerClassName: "info-simple-spacer"
+  });
+  renderLinkedTextIndex(infoPartnersContent, content.partners, {
+    hiddenFirstLine: "Long-term Partners"
+  });
+  renderLinkedTextIndex(infoBrandsContent, content.brands, {
+    hiddenFirstLine: "Brands & Labels"
+  });
+  renderExperienceIndex(infoExperienceContent, content.experience, {
+    hiddenFirstLine: "Built on Experience",
+    groupHeadings: [
+      "2x4",
+      "Gretel",
+      "Project Projects, New York",
+      "Total Design",
+      "Nick Bell Design"
+    ]
+  });
+  renderContactIndex(infoContactContent, content.contact);
+
+  [
+    infoTemporaryEnvironmentsContent,
+    infoTemporaryCtaContent,
+    infoClientsContent,
+    infoPublicationsContent,
+    infoExhibitionsContent,
+    infoLecturesContent,
+    infoPartnersContent,
+    infoBrandsContent,
+    infoExperienceContent,
+    infoContactContent
+  ].forEach((target) => setInfoSectionVisible(target, true));
+  setInfoSectionVisible(infoTemporaryEnvironmentsContent, false);
+  setInfoSectionVisible(infoTemporaryCtaContent, false);
+  setInfoSectionVisible(infoTemporaryConjunctionContent, false);
+}
+
+function renderTemporaryInfoPage(content) {
+  renderPlainTextIndex(infoClientsContent, TEMPORARY_INFO_CLIENTS_TEXT, {
+    hiddenFirstLine: "Selected Clients",
+    groupHeadings: [
+      "Culture & Knowledge",
+      "Public & Institutional",
+      "Architecture & Place",
+      "Commercial & Brand",
+      "Energy & Industry"
+    ]
+  });
+  renderPlainTextIndex(infoTemporaryConjunctionContent, TEMPORARY_INFO_CONJUNCTION_TEXT, {
+    hiddenFirstLine: "We often work alongside architectural practices such as",
+    rowClassName: "info-simple-row",
+    spacerClassName: "info-simple-spacer"
+  });
+  renderPublicationIndex(infoPublicationsContent, content.publications, {
+    hiddenFirstLine: "Publications"
+  });
+  renderPlainTextIndex(infoExhibitionsContent, content.exhibitions, {
+    hiddenFirstLine: "Exhibitions",
+    rowClassName: "info-simple-row",
+    spacerClassName: "info-simple-spacer"
+  });
+  renderPlainTextIndex(infoLecturesContent, content.lectures, {
+    hiddenFirstLine: "Lectures & Teaching",
+    rowClassName: "info-simple-row",
+    spacerClassName: "info-simple-spacer"
+  });
+  renderLinkedTextIndex(infoPartnersContent, content.partners, {
+    hiddenFirstLine: "Long-term Partners"
+  });
+  renderLinkedTextIndex(infoBrandsContent, content.brands, {
+    hiddenFirstLine: "Brands & Labels"
+  });
+  renderExperienceIndex(infoExperienceContent, content.experience, {
+    hiddenFirstLine: "Built on Experience",
+    groupHeadings: [
+      "2x4",
+      "Gretel",
+      "Project Projects, New York",
+      "Total Design",
+      "Nick Bell Design"
+    ]
+  });
+  renderContactIndex(infoContactContent, content.contact);
+
+  [
+    infoTemporaryEnvironmentsContent,
+    infoTemporaryCtaContent,
+    infoClientsContent,
+    infoTemporaryConjunctionContent,
+  ].forEach((target) => setInfoSectionVisible(target, true));
+  setInfoSectionVisible(infoPublicationsContent, Boolean(content.publications));
+  setInfoSectionVisible(infoExhibitionsContent, Boolean(content.exhibitions));
+  setInfoSectionVisible(infoLecturesContent, Boolean(content.lectures));
+  setInfoSectionVisible(infoPartnersContent, Boolean(content.partners));
+  setInfoSectionVisible(infoBrandsContent, Boolean(content.brands));
+  setInfoSectionVisible(infoExperienceContent, Boolean(content.experience));
+  setInfoSectionVisible(infoContactContent, Boolean(content.contact));
+}
+
 async function fetchMarkdown(path) {
+  if (!isFullMode()) return "";
+
   try {
     const response = await fetch(`${path}?v=${INFO_MARKDOWN_VERSION}`);
     if (!response.ok) return "";
@@ -414,7 +983,7 @@ async function fetchMarkdown(path) {
   }
 }
 
-async function loadInfoMarkdown() {
+async function loadInfoMarkdownContent() {
   const [
     english,
     dutch,
@@ -441,53 +1010,33 @@ async function loadInfoMarkdown() {
     fetchMarkdown("/info/contact.md")
   ]);
 
-  renderMarkdown(infoEnglishContent, english);
-  renderMarkdown(infoDutchContent, dutch);
-  renderMarkdown(infoKoreanContent, korean);
-  renderPlainTextIndex(infoClientsContent, clients, {
-    hiddenFirstLine: "Selected Clients",
-    groupHeadings: [
-      "Culture & Knowledge",
-      "Public & Institutional",
-      "Architecture & Place",
-      "Commercial & Brand",
-      "Energy & Industry"
-    ]
-  });
-  renderPublicationIndex(infoPublicationsContent, publications, {
-    hiddenFirstLine: "Publications"
-  });
-  renderPlainTextIndex(infoExhibitionsContent, exhibitions, {
-    hiddenFirstLine: "Exhibitions",
-    rowClassName: "info-simple-row",
-    spacerClassName: "info-simple-spacer"
-  });
-  renderPlainTextIndex(infoLecturesContent, lectures, {
-    hiddenFirstLine: "Lectures & Teaching",
-    rowClassName: "info-simple-row",
-    spacerClassName: "info-simple-spacer"
-  });
-  renderLinkedTextIndex(infoPartnersContent, partners, {
-    hiddenFirstLine: "Long-term Partners"
-  });
-  renderLinkedTextIndex(infoBrandsContent, brands, {
-    hiddenFirstLine: "Brands & Labels"
-  });
-  renderPlainTextIndex(infoExperienceContent, experience, {
-    hiddenFirstLine: "Built on experience from",
-    rowClassName: "info-experience-row",
-    spacerClassName: "info-experience-spacer",
-    groupHeadings: [
-      "2x4, New York",
-      "Gretel, New York",
-      "Project Projects, New York",
-      "Total Design, Amsterdam",
-      "Nick Bell Design, London"
-    ]
-  });
-  renderContactIndex(infoContactContent, contact, {
-    hiddenFirstLine: "Contact"
-  });
+  return {
+    english,
+    dutch,
+    korean,
+    clients,
+    publications,
+    exhibitions,
+    lectures,
+    partners,
+    brands,
+    experience,
+    contact
+  };
+}
+
+async function loadInfoMarkdown() {
+  if (!isFullMode()) return;
+
+  const content = await loadInfoMarkdownContent();
+  renderDefaultInfoPage(content);
+}
+
+function ensureTemporaryInfoPageRendered() {
+  if (!isTemporaryWebsiteActive() || hasRenderedTemporaryInfoPage) return;
+
+  hasRenderedTemporaryInfoPage = true;
+  renderTemporaryInfoPage(TEMPORARY_INFO_STATIC_CONTENT);
 }
 
 function getAbsoluteUrl(path) {
@@ -1021,7 +1570,15 @@ function getMetadataData(asset) {
 }
 
 function isMenu2StoryMode() {
-  return currentMenu2Version === "v2";
+  return currentMenu2Version === "v2" || currentMenu2Version === "v3" || currentMenu2Version === "v4";
+}
+
+function isMenu2UltraCompactStoryMode() {
+  return currentMenu2Version === "v3";
+}
+
+function isMenu2InfoBlobStoryMode() {
+  return currentMenu2Version === "v4";
 }
 
 function getStoryAsset(asset) {
@@ -1046,11 +1603,20 @@ function getProjectStoryUrls(projectKey) {
 function parseProjectStoryMarkdown(markdown) {
   const fields = {
     title: "",
+    from: "",
+    to: "",
     complexity: "",
+    complexityShort: "",
     clarity: "",
+    clarityShort: "",
+    idea: "",
     work: []
   };
-  const fieldNames = new Set(["title", "complexity", "clarity", "work"]);
+  const fieldNames = new Set(["title", "from", "to", "complexity", "complexityshort", "clarity", "clarityshort", "idea", "work"]);
+  const fieldAliases = {
+    complexityshort: "complexityShort",
+    clarityshort: "clarityShort"
+  };
   let currentField = "";
 
   String(markdown || "")
@@ -1060,7 +1626,7 @@ function parseProjectStoryMarkdown(markdown) {
       const match = line.match(/^([A-Za-z ]+):\s*(.*)$/);
 
       if (match && fieldNames.has(match[1].trim().toLowerCase())) {
-        currentField = match[1].trim().toLowerCase();
+        currentField = fieldAliases[match[1].trim().toLowerCase()] || match[1].trim().toLowerCase();
         const value = match[2].trim();
 
         if (currentField === "title") {
@@ -1098,13 +1664,19 @@ function getFallbackProjectStory(asset) {
 
   return {
     title: folderData.projectTitle,
+    from: "",
+    to: "",
     complexity: "",
+    complexityShort: "",
     clarity: "",
+    clarityShort: "",
+    idea: "",
     work: []
   };
 }
 
 async function fetchProjectStory(projectKey) {
+  if (!isFullMode()) return {};
   if (!projectKey) return {};
 
   if (projectStoryCache.has(projectKey)) {
@@ -1162,6 +1734,123 @@ function createStorySection(title, text) {
   return section;
 }
 
+function getProjectImageAssets(folder) {
+  const images = [];
+  const seenFiles = new Set();
+
+  slideshowAssets.forEach((item) => {
+    const assets = item.pairAssets?.length ? item.pairAssets : [getStoryAsset(item)];
+
+    assets.forEach((asset) => {
+      if (!asset || asset.folder !== folder || asset.mediaType !== "image") return;
+      if (seenFiles.has(asset.file)) return;
+
+      seenFiles.add(asset.file);
+      images.push(asset);
+    });
+  });
+
+  if (!images.length && folder) {
+    console.warn("[Menu2 V2] no project images found in manifest", folder);
+  }
+
+  return images;
+}
+
+function pickProjectStoryImage(folder, preferredRoles, fallbackIndex = 0, excludeFile = "") {
+  const images = getProjectImageAssets(folder);
+  const roleMatch = images.find((asset) => {
+    const role = asset.role || asset.assetRole || "";
+    return asset.file !== excludeFile && preferredRoles.includes(role);
+  });
+
+  if (roleMatch) return roleMatch;
+
+  return images.find((asset, index) => index >= fallbackIndex && asset.file !== excludeFile)
+    || images.find((asset) => asset.file !== excludeFile)
+    || null;
+}
+
+function createStoryColumn(title, text, imageAsset) {
+  const section = document.createElement("section");
+  const heading = document.createElement("h3");
+  const paragraph = document.createElement("p");
+
+  section.className = "menu2-story-column";
+
+  if (imageAsset) {
+    const image = document.createElement("img");
+    image.className = "menu2-story-image";
+    image.src = imageAsset.src;
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
+    section.append(image);
+  }
+
+  heading.textContent = title;
+  paragraph.textContent = text || "";
+  section.append(heading, paragraph);
+  return section;
+}
+
+function normalizeStorySentence(text) {
+  return String(text || "").trim().replace(/[.;:\s]+$/g, "");
+}
+
+function combineStoryContext(story) {
+  const complexity = normalizeStorySentence(story.complexityShort || story.complexity);
+  const clarity = normalizeStorySentence(story.clarityShort || story.clarity);
+
+  if (complexity && clarity) return `${complexity}; ${clarity}.`;
+  if (complexity) return `${complexity}.`;
+  if (clarity) return `${clarity}.`;
+  return "";
+}
+
+function formatV4Discipline(asset) {
+  const representative = getStoryAsset(asset);
+  const folder = representative?.folder || asset?.folder || "";
+  const parts = String(folder || "").split("__");
+  const discipline = parts.length >= 4 ? parts[parts.length - 1] : representative?.discipline || asset?.discipline || "";
+
+  return String(discipline || "")
+    .split("-")
+    .map((part) => formatMachineLabel(part))
+    .filter(Boolean)
+    .join(" & ");
+}
+
+function formatV4Client(asset) {
+  const representative = getStoryAsset(asset);
+  const folder = representative?.folder || asset?.folder || "";
+  const client = String(folder || "").split("__")[0] || representative?.client || asset?.client || "Supergroup";
+
+  return formatMachineLabel(client, { titleCase: true })
+    .replace(/\bNdsm\b/g, "NDSM")
+    .replace(/\bNDSM Werf\b/g, "NDSM-Werf");
+}
+
+function createV4TransformationText(story) {
+  const fromText = normalizeStorySentence(story.from || story.complexityShort || story.complexity);
+  const toText = normalizeStorySentence(story.to || story.clarityShort || story.clarity);
+
+  if (fromText && toText) return `From ${fromText}\nTo ${toText}`;
+  if (fromText) return `From ${fromText}.`;
+  if (toText) return `To ${toText}.`;
+  return "";
+}
+
+function createV4FromLine(story) {
+  const fromText = normalizeStorySentence(story.from || story.complexityShort || story.complexity);
+  return fromText ? `From ${fromText}` : "";
+}
+
+function createV4ToLine(story) {
+  const toText = normalizeStorySentence(story.to || story.clarityShort || story.clarity);
+  return toText ? `To ${toText}` : "";
+}
+
 function createMenu2StoryElement(story, asset) {
   const representative = getStoryAsset(asset);
   const folder = representative?.folder || asset?.folder || "";
@@ -1171,17 +1860,20 @@ function createMenu2StoryElement(story, asset) {
     period: representative?.period || asset?.period
   });
   const storyElement = document.createElement("div");
+  const header = document.createElement("header");
   const title = document.createElement("h2");
   const meta = document.createElement("p");
-  const sections = [
-    createStorySection("Complexity", story.complexity),
-    createStorySection("Clarity", story.clarity)
-  ].filter(Boolean);
+  const columns = document.createElement("div");
+  const complexityText = story.complexityShort || story.complexity || "";
+  const clarityText = story.clarityShort || story.clarity || "";
+  const complexityImage = pickProjectStoryImage(folder, ["reference", "study", "process"], 0);
+  const clarityImage = pickProjectStoryImage(folder, ["diagram", "system", "result"], 1, complexityImage?.file || "");
   const item = createStorySection("Item", getAssetDescription(asset));
   const itemCaption = item?.querySelector("p");
 
-  storyElement.className = "menu2-story";
+  storyElement.className = "menu2-story menu2-story-v2";
   storyElement.dataset.folder = folder;
+  header.className = "menu2-story-header";
   title.className = "menu2-story-title";
   title.textContent = folderData.projectTitle;
   meta.className = "menu2-story-meta";
@@ -1189,14 +1881,160 @@ function createMenu2StoryElement(story, asset) {
     `${folderData.x} for ${folderData.client}`,
     folderData.period
   ].filter(Boolean).join(", ");
-  storyElement.append(title, meta, ...sections);
+  header.append(title, meta);
+  columns.className = "menu2-story-columns";
+  columns.append(
+    createStoryColumn("Complexity", complexityText, complexityImage),
+    createStoryColumn("Clarity", clarityText, clarityImage)
+  );
+  storyElement.append(header, columns);
 
   if (item && itemCaption) {
-    item.classList.add("menu2-item");
+    item.classList.add("menu2-story-item", "menu2-item");
     itemCaption.className = "menu2-item-caption";
     storyElement.append(item);
   }
 
+  return storyElement;
+}
+
+function createMenu2StoryV3Element(story, asset) {
+  const representative = getStoryAsset(asset);
+  const folder = representative?.folder || asset?.folder || "";
+  const folderData = parseFolderDisplayData(folder, {
+    client: representative?.client || asset?.client,
+    title: representative?.title || asset?.title,
+    period: representative?.period || asset?.period
+  });
+  const storyElement = document.createElement("div");
+  const header = document.createElement("header");
+  const title = document.createElement("h2");
+  const meta = document.createElement("p");
+  const context = document.createElement("p");
+  const item = createStorySection("Item", getAssetDescription(asset));
+  const itemCaption = item?.querySelector("p");
+
+  storyElement.className = "menu2-story menu2-story-v3";
+  storyElement.dataset.folder = folder;
+  header.className = "menu2-story-header";
+  title.className = "menu2-story-title";
+  title.textContent = folderData.projectTitle;
+  meta.className = "menu2-story-meta";
+  meta.textContent = [
+    `${folderData.x} for ${folderData.client}`,
+    folderData.period
+  ].filter(Boolean).join(", ");
+  context.className = "menu2-story-context";
+  context.textContent = combineStoryContext(story);
+  header.append(title, meta);
+  storyElement.append(header, context);
+
+  if (item && itemCaption) {
+    item.classList.add("menu2-story-item", "menu2-item");
+    itemCaption.className = "menu2-item-caption";
+    storyElement.append(item);
+  }
+
+  return storyElement;
+}
+
+function setMenu2V4BlobOpen(storyElement, isOpen) {
+  const button = storyElement.querySelector(".menu2-v4-info-button");
+  const blob = storyElement.querySelector(".menu2-v4-blob");
+  if (!button || !blob) return;
+
+  blob.classList.remove("opens-up", "opens-down");
+
+  if (isOpen) {
+    const rect = metadataPanel.getBoundingClientRect();
+    const opensDown = rect.top + rect.height / 2 < window.innerHeight / 2;
+    blob.classList.add(opensDown ? "opens-down" : "opens-up");
+  }
+
+  button.classList.toggle("is-active", isOpen);
+  button.setAttribute("aria-expanded", String(isOpen));
+  blob.classList.toggle("is-open", isOpen);
+}
+
+function closeMenu2V4Blob() {
+  const storyElement = menu2SlideshowMode.querySelector(".menu2-story-v4");
+  if (storyElement) setMenu2V4BlobOpen(storyElement, false);
+}
+
+function getMenu2StoryVersionLabel() {
+  if (isMenu2InfoBlobStoryMode()) return "V4";
+  if (isMenu2UltraCompactStoryMode()) return "V3";
+  return "V2";
+}
+
+function createMenu2StoryElementForVersion(story, asset) {
+  if (isMenu2InfoBlobStoryMode()) return createMenu2StoryV4Element(story, asset);
+  if (isMenu2UltraCompactStoryMode()) return createMenu2StoryV3Element(story, asset);
+  return createMenu2StoryElement(story, asset);
+}
+
+function createMenu2StoryV4Element(story, asset) {
+  if (asset?.isIntro) return createMenu2StoryV4IntroElement();
+
+  const representative = getStoryAsset(asset);
+  const folder = representative?.folder || asset?.folder || "";
+  const folderData = parseFolderDisplayData(folder, {
+    client: representative?.client || asset?.client,
+    title: representative?.title || asset?.title,
+    period: representative?.period || asset?.period
+  });
+  const storyElement = document.createElement("div");
+  const transform = document.createElement("div");
+  const fromLine = document.createElement("div");
+  const toLine = document.createElement("div");
+  const project = document.createElement("div");
+  const title = document.createElement("div");
+  const meta = document.createElement("div");
+  const infoButton = document.createElement("button");
+  const blob = document.createElement("div");
+
+  storyElement.className = "menu2-story menu2-story-v4";
+  storyElement.dataset.folder = folder;
+  transform.className = "menu2-v4-transform";
+  fromLine.textContent = createV4FromLine(story);
+  toLine.textContent = createV4ToLine(story);
+  transform.append(fromLine, toLine);
+  project.className = "menu2-v4-project";
+  title.className = "menu2-v4-title";
+  title.textContent = story.title || folderData.projectTitle;
+  meta.className = "menu2-v4-meta";
+  meta.textContent = `${formatV4Discipline(asset)} for ${formatV4Client(asset)}`;
+  infoButton.className = "menu2-v4-info-button";
+  infoButton.type = "button";
+  infoButton.setAttribute("aria-label", "More project information");
+  infoButton.setAttribute("aria-expanded", "false");
+  infoButton.textContent = "ⓘ";
+  blob.className = "menu2-v4-blob";
+  blob.textContent = "More information coming soon.";
+  infoButton.addEventListener("click", () => {
+    setMenu2V4BlobOpen(storyElement, !blob.classList.contains("is-open"));
+  });
+  project.append(title, meta);
+  storyElement.append(transform, project, infoButton, blob);
+  return storyElement;
+}
+
+function createMenu2StoryV4IntroElement() {
+  const storyElement = document.createElement("div");
+  const transformation = document.createElement("div");
+  const fromLine = document.createElement("div");
+  const toLine = document.createElement("div");
+  const intro = document.createElement("div");
+
+  storyElement.className = "menu2-story menu2-story-v4 menu2-story-v4-intro";
+  storyElement.dataset.folder = "supergroup__intro__2026__complex";
+  transformation.className = "menu2-v4-transform";
+  fromLine.textContent = "From complexity";
+  toLine.textContent = "To clarity";
+  transformation.append(fromLine, toLine);
+  intro.className = "menu2-v4-intro";
+  intro.textContent = "Across culture, strategy, organisation, information and design.";
+  storyElement.append(transformation, intro);
   return storyElement;
 }
 
@@ -1216,12 +2054,20 @@ function setMenu2V1Visible(isVisible) {
   metadataProjectViewport.hidden = !isVisible;
   metadataAssetViewport.hidden = !isVisible;
   menu2SlideshowMode.classList.toggle("is-story-mode", !isVisible);
+  menu2SlideshowMode.classList.toggle("is-story-v2", !isVisible && currentMenu2Version === "v2");
+  menu2SlideshowMode.classList.toggle("is-story-v3", !isVisible && currentMenu2Version === "v3");
+  menu2SlideshowMode.classList.toggle("is-story-v4", !isVisible && currentMenu2Version === "v4");
   metadataPanel.classList.toggle("is-story-mode", !isVisible);
+  metadataPanel.classList.toggle("is-story-v2", !isVisible && currentMenu2Version === "v2");
+  metadataPanel.classList.toggle("is-story-v3", !isVisible && currentMenu2Version === "v3");
+  metadataPanel.classList.toggle("is-story-v4", !isVisible && currentMenu2Version === "v4");
 
   if (isVisible) {
     const viewport = menu2SlideshowMode.querySelector(".menu2-story-viewport");
     if (viewport) viewport.textContent = "";
-    currentMenu2V2ProjectKey = null;
+    currentMenu2StoryProjectKey = null;
+    menu2SlideshowMode.classList.remove("is-story-v2", "is-story-v3", "is-story-v4");
+    metadataPanel.classList.remove("is-story-v2", "is-story-v3", "is-story-v4");
   }
 }
 
@@ -1259,30 +2105,34 @@ function updateMenu2StoryItem(asset, direction = "forward") {
 }
 
 async function updateMenu2Story(direction = "forward", options = {}) {
+  if (!isFullMode()) return;
+
   const asset = slideshowAssets[currentIndex];
   if (!asset) return;
 
   setMenu2V1Visible(false);
   const viewport = ensureMenu2StoryViewport();
   const projectKey = getProjectKey(asset);
-  const previousProjectKey = currentMenu2V2ProjectKey;
+  const previousProjectKey = currentMenu2StoryProjectKey;
   const shouldAnimate = options.animate !== false && Boolean(previousProjectKey) && previousProjectKey !== projectKey;
+  const storyVersion = getMenu2StoryVersionLabel();
 
-  console.log("[Menu2 V2] slide changed", {
+  console.log(`[Menu2 ${storyVersion}] slide changed`, {
     index: currentIndex,
     projectKey,
     previousProjectKey
   });
 
   if (previousProjectKey === projectKey && viewport.querySelector(".menu2-story")) {
-    console.log("[Menu2 V2] updating item only");
-    updateMenu2StoryItem(asset, direction);
+    console.log(`[Menu2 ${storyVersion}] updating item only`);
+    if (!isMenu2InfoBlobStoryMode()) updateMenu2StoryItem(asset, direction);
     metadataPanel.dataset.storyItem = getAssetDescription(asset);
     return;
   }
 
-  console.log("[Menu2 V2] updating full story");
-  currentMenu2V2ProjectKey = projectKey;
+  console.log(`[Menu2 ${storyVersion}] updating full story`);
+  if (isMenu2InfoBlobStoryMode()) closeMenu2V4Blob();
+  currentMenu2StoryProjectKey = projectKey;
   metadataPanel.dataset.storyFolder = projectKey;
   metadataPanel.dataset.storyItem = getAssetDescription(asset);
 
@@ -1290,7 +2140,7 @@ async function updateMenu2Story(direction = "forward", options = {}) {
   projectStoryRequestToken = requestToken;
   const fallbackStory = getFallbackProjectStory(asset);
   const renderStory = (story, shouldAnimateStory = shouldAnimate) => {
-    const incoming = createMenu2StoryElement(story, asset);
+    const incoming = createMenu2StoryElementForVersion(story, asset);
     const outgoing = viewport.querySelector(".menu2-story");
 
     if (!outgoing || !shouldAnimateStory) {
@@ -1318,7 +2168,7 @@ async function updateMenu2Story(direction = "forward", options = {}) {
   renderStory(fallbackStory);
 
   const fetchedStory = await fetchProjectStory(projectKey);
-  if (requestToken !== projectStoryRequestToken || currentMenu2V2ProjectKey !== projectKey) return;
+  if (requestToken !== projectStoryRequestToken || currentMenu2StoryProjectKey !== projectKey) return;
 
   const story = {
     ...fallbackStory,
@@ -1436,6 +2286,8 @@ function animateAssetMetadata(data, direction) {
 }
 
 function updateMetadataMenu(direction = "forward", options = {}) {
+  if (!isFullMode()) return;
+
   const asset = slideshowAssets[currentIndex];
   if (!asset) return;
 
@@ -1641,6 +2493,459 @@ function setMenu2Mode(mode, options = {}) {
   }, 420));
 }
 
+function renderTemporaryNotice() {
+  menu2SlideshowMode.textContent = "";
+  menu2SlideshowMode.classList.remove("is-story-mode");
+
+  const notice = document.createElement("div");
+  const text = document.createElement("p");
+  const contactLink = document.createElement("a");
+
+  notice.className = "temporary-notice";
+  text.append(
+    "We are currently updating our website.",
+    document.createElement("br"),
+    document.createElement("br"),
+    "For inquiries, collaborations or project requests, please "
+  );
+  contactLink.href = `mailto:${TEMPORARY_CONTACT_EMAIL}`;
+  contactLink.textContent = TEMPORARY_NOTICE_LINK_LABEL;
+  text.append(contactLink);
+  notice.append(text);
+  menu2SlideshowMode.append(notice);
+}
+
+function applyTemporaryWebsiteMode() {
+  document.body.classList.add("temporary-website", "temporary-v1", "is-slideshow-view");
+  document.body.classList.remove("is-info-view", "is-grid-view");
+  slideshow.setAttribute("aria-label", "Supergroup temporary homepage");
+  slideshow.classList.remove("loading");
+  slideshow.removeAttribute("aria-live");
+  isSlideshowPaused = true;
+  currentView = "slideshow";
+  currentIndex = 0;
+
+  clearSlideTiming();
+  pauseAllSlideVideos();
+  slides.forEach(resetSlideClasses);
+  if (slides[0]) slides[0].classList.add("active");
+
+  contactSheetOverlay.classList.remove("visible");
+  contactSheetOverlay.setAttribute("aria-hidden", "true");
+  aboutOverlay.classList.remove("visible");
+  aboutOverlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("overlay-open");
+  metadataPanel.classList.remove("is-story-mode", "is-story-v3", "is-story-v4");
+  setMenu2V1Visible(true);
+  renderTemporaryNotice();
+  setMenu2Mode("slideshow", { animate: false });
+  updateDisciplineTitle(slideshowAssets[0], "complex");
+  if (slides.length) {
+    updateDocumentBackground();
+  } else {
+    document.body.style.backgroundColor = "#000";
+  }
+  syncViewButtons();
+  syncTemporaryHomepageEffects();
+  replaceBrowserPath("/", { view: "slideshow", mode: "temporary" });
+  setCanonicalUrl(getAbsoluteUrl("/"));
+}
+
+function shouldRunTemporaryHomepageEffect() {
+  return (
+    isTemporaryWebsiteActive() &&
+    currentView === "slideshow" &&
+    !document.hidden &&
+    !reducedMotionQuery.matches
+  );
+}
+
+function shouldRunTemporaryLogoParticles() {
+  return (
+    shouldRunTemporaryHomepageEffect() &&
+    window.matchMedia("(max-width: 768px)").matches &&
+    !reducedMotionQuery.matches
+  );
+}
+
+function syncTemporaryHomepageEffects() {
+  syncTemporaryLogoParticles();
+  syncTemporaryFloatingFavicon();
+}
+
+function syncTemporaryLogoParticles() {
+  if (shouldRunTemporaryLogoParticles()) {
+    if (!temporaryLogoParticleController) {
+      temporaryLogoParticleController = createTemporaryLogoParticleController();
+    }
+    temporaryLogoParticleController.start();
+    return;
+  }
+
+  if (temporaryLogoParticleController) temporaryLogoParticleController.stop();
+}
+
+function syncTemporaryFloatingFavicon() {
+  if (shouldRunTemporaryHomepageEffect()) {
+    if (!temporaryFloatingFaviconController) {
+      temporaryFloatingFaviconController = createTemporaryFloatingFaviconController();
+    }
+    temporaryFloatingFaviconController.start();
+    return;
+  }
+
+  if (temporaryFloatingFaviconController) temporaryFloatingFaviconController.stop();
+}
+
+function createTemporaryLogoParticleController() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const particles = [];
+  let animationFrame = 0;
+  let isRunning = false;
+  let isLoaded = false;
+  let width = 0;
+  let height = 0;
+  let settledAt = 0;
+  let startToken = 0;
+  let logoViewBox = { x: 0, y: 0, width: 841.9, height: 405.9 };
+  const pointer = {
+    x: 0,
+    y: 0,
+    isActive: false
+  };
+
+  svg.classList.add("temporary-logo-particles");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  document.body.append(svg);
+
+  function parseViewBox(value) {
+    const parts = String(value || "")
+      .trim()
+      .split(/\s+/)
+      .map(Number);
+
+    if (parts.length !== 4 || parts.some((part) => !Number.isFinite(part))) return logoViewBox;
+
+    return {
+      x: parts[0],
+      y: parts[1],
+      width: parts[2],
+      height: parts[3]
+    };
+  }
+
+  async function loadLogoParts() {
+    if (isLoaded) return;
+
+    try {
+      const response = await fetch(FLOCKING_LOGO_URL);
+      if (!response.ok) throw new Error(`Logo failed: ${response.status}`);
+
+      const markup = await response.text();
+      const template = document.createElement("template");
+      template.innerHTML = markup.trim();
+      const sourceSvg = template.content.querySelector("svg");
+      if (!sourceSvg) throw new Error("Logo SVG missing");
+
+      logoViewBox = parseViewBox(sourceSvg.getAttribute("viewBox"));
+      sourceSvg.querySelectorAll("path").forEach((path) => {
+        const clone = path.cloneNode(true);
+        clone.removeAttribute("class");
+        clone.setAttribute("fill", "#fff");
+        clone.setAttribute("vector-effect", "non-scaling-stroke");
+        svg.append(clone);
+      });
+
+      isLoaded = true;
+    } catch (error) {
+      isLoaded = true;
+    }
+  }
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    seedParticles();
+  }
+
+  function seedParticles() {
+    if (width <= 0 || height <= 0 || !isLoaded) return;
+
+    particles.length = 0;
+    const paths = Array.from(svg.querySelectorAll("path"));
+    const scale = Math.min(width * 0.82 / logoViewBox.width, height * 0.42 / logoViewBox.height);
+    const offsetX = (width - logoViewBox.width * scale) / 2 - logoViewBox.x * scale;
+    const offsetY = height * 0.45 - logoViewBox.height * scale / 2 - logoViewBox.y * scale;
+
+    paths.forEach((path) => {
+      let box = null;
+      try {
+        box = path.getBBox();
+      } catch (error) {
+        box = { x: 0, y: 0, width: 24, height: 24 };
+      }
+
+      const radius = Math.max(18, Math.max(box.width, box.height) * scale * 0.42);
+      particles.push({
+        element: path,
+        x: offsetX,
+        y: offsetY,
+        vx: (Math.random() - 0.5) * 2.2,
+        vy: (Math.random() - 0.5) * 2.2,
+        tx: offsetX,
+        ty: offsetY,
+        scale,
+        box,
+        radius
+      });
+    });
+
+    settledAt = performance.now();
+  }
+
+  function getParticleCenter(particle) {
+    return {
+      x: particle.x + (particle.box.x + particle.box.width / 2) * particle.scale,
+      y: particle.y + (particle.box.y + particle.box.height / 2) * particle.scale
+    };
+  }
+
+  function keepParticleInBounds(particle) {
+    const left = particle.x + particle.box.x * particle.scale;
+    const right = left + particle.box.width * particle.scale;
+    const top = particle.y + particle.box.y * particle.scale;
+    const bottom = top + particle.box.height * particle.scale;
+
+    if (left < 0) {
+      particle.x -= left;
+      particle.vx = Math.abs(particle.vx);
+    } else if (right > width) {
+      particle.x -= right - width;
+      particle.vx = -Math.abs(particle.vx);
+    }
+
+    if (top < 0) {
+      particle.y -= top;
+      particle.vy = Math.abs(particle.vy);
+    } else if (bottom > height) {
+      particle.y -= bottom - height;
+      particle.vy = -Math.abs(particle.vy);
+    }
+  }
+
+  function step() {
+    if (!isRunning) return;
+
+    const now = performance.now();
+    const isBreaking = now - settledAt < 900;
+
+    particles.forEach((particle, index) => {
+      if (isBreaking) {
+        particle.x += (particle.tx - particle.x) * 0.08;
+        particle.y += (particle.ty - particle.y) * 0.08;
+      } else {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+      }
+
+      for (let otherIndex = index + 1; otherIndex < particles.length; otherIndex += 1) {
+        const other = particles[otherIndex];
+        const particleCenter = getParticleCenter(particle);
+        const otherCenter = getParticleCenter(other);
+        const dx = otherCenter.x - particleCenter.x;
+        const dy = otherCenter.y - particleCenter.y;
+        const distance = Math.hypot(dx, dy);
+        const minDistance = particle.radius + other.radius;
+        if (distance <= 0 || distance >= minDistance) continue;
+
+        const nx = dx / distance;
+        const ny = dy / distance;
+        const overlap = (minDistance - distance) * 0.34;
+        particle.x -= nx * overlap;
+        particle.y -= ny * overlap;
+        other.x += nx * overlap;
+        other.y += ny * overlap;
+        const impulse = (particle.vx - other.vx) * nx + (particle.vy - other.vy) * ny;
+        particle.vx -= impulse * nx * 0.82;
+        particle.vy -= impulse * ny * 0.82;
+        other.vx += impulse * nx * 0.82;
+        other.vy += impulse * ny * 0.82;
+      }
+
+      if (pointer.isActive && !isBreaking) {
+        const center = getParticleCenter(particle);
+        const dx = center.x - pointer.x;
+        const dy = center.y - pointer.y;
+        const distance = Math.hypot(dx, dy);
+        const radius = 140;
+
+        if (distance > 0 && distance < radius) {
+          const force = (1 - distance / radius) * 1.45;
+          particle.vx += (dx / distance) * force;
+          particle.vy += (dy / distance) * force;
+        }
+      }
+
+      keepParticleInBounds(particle);
+
+      if (!isBreaking) {
+        particle.vx = Math.max(-3.2, Math.min(3.2, particle.vx * 0.998));
+        particle.vy = Math.max(-3.2, Math.min(3.2, particle.vy * 0.998));
+      }
+
+      particle.element.setAttribute("transform", `translate(${particle.x} ${particle.y}) scale(${particle.scale})`);
+    });
+
+    animationFrame = window.requestAnimationFrame(step);
+  }
+
+  async function start() {
+    const token = startToken + 1;
+    startToken = token;
+    svg.classList.add("is-visible");
+    if (isRunning) return;
+    await loadLogoParts();
+    if (token !== startToken || !shouldRunTemporaryLogoParticles()) return;
+    isRunning = true;
+    resize();
+    animationFrame = window.requestAnimationFrame(step);
+  }
+
+  function stop() {
+    startToken += 1;
+    svg.classList.remove("is-visible");
+    isRunning = false;
+    window.cancelAnimationFrame(animationFrame);
+  }
+
+  svg.addEventListener("pointermove", (event) => {
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
+    pointer.isActive = true;
+  });
+  svg.addEventListener("pointerdown", (event) => {
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
+    pointer.isActive = true;
+  });
+  svg.addEventListener("pointerleave", () => {
+    pointer.isActive = false;
+  });
+  svg.addEventListener("pointercancel", () => {
+    pointer.isActive = false;
+  });
+  window.addEventListener("resize", () => {
+    if (isRunning) resize();
+    syncTemporaryLogoParticles();
+  });
+  reducedMotionQuery.addEventListener("change", syncTemporaryLogoParticles);
+
+  return { start, stop };
+}
+
+function createTemporaryFloatingFaviconController() {
+  const image = document.createElement("img");
+  let animationFrame = 0;
+  let isRunning = false;
+  let x = 0;
+  let y = 0;
+  let vx = 0.72;
+  let vy = 0.58;
+  let rotation = 0;
+  let vr = 0.28;
+  let width = 0;
+  let height = 0;
+  let objectWidth = 0;
+  let objectHeight = 0;
+
+  image.className = "temporary-v1-floating-favicon";
+  image.src = "/assets/supergroup/favicon-dark.svg";
+  image.alt = "";
+  image.setAttribute("aria-hidden", "true");
+  document.body.append(image);
+
+  function cancelFrame() {
+    if (!animationFrame) return;
+    window.cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
+  }
+
+  function measure() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    const rect = image.getBoundingClientRect();
+    objectWidth = rect.width || 56;
+    objectHeight = rect.height || objectWidth;
+    x = Math.min(Math.max(0, x), Math.max(0, width - objectWidth));
+    y = Math.min(Math.max(0, y), Math.max(0, height - objectHeight));
+  }
+
+  function seed() {
+    measure();
+    if (x === 0 && y === 0) {
+      x = Math.max(0, width * 0.68 - objectWidth / 2);
+      y = Math.max(0, height * 0.28 - objectHeight / 2);
+    }
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    vx = isMobile ? 0.52 : 0.72;
+    vy = isMobile ? 0.44 : 0.58;
+    vr = isMobile ? 0.22 : 0.28;
+  }
+
+  function step() {
+    if (!isRunning) return;
+
+    x += vx;
+    y += vy;
+    rotation += vr;
+
+    if (x <= 0 || x >= width - objectWidth) {
+      x = Math.min(Math.max(0, x), Math.max(0, width - objectWidth));
+      vx *= -1;
+      vr *= -1;
+    }
+
+    if (y <= 0 || y >= height - objectHeight) {
+      y = Math.min(Math.max(0, y), Math.max(0, height - objectHeight));
+      vy *= -1;
+      vr *= -1;
+    }
+
+    image.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg)`;
+    animationFrame = window.requestAnimationFrame(step);
+  }
+
+  function start() {
+    if (!shouldRunTemporaryHomepageEffect()) {
+      stop();
+      return;
+    }
+    image.classList.add("is-visible");
+    if (isRunning) return;
+    isRunning = true;
+    seed();
+    cancelFrame();
+    animationFrame = window.requestAnimationFrame(step);
+  }
+
+  function stop() {
+    image.classList.remove("is-visible");
+    isRunning = false;
+    cancelFrame();
+  }
+
+  window.addEventListener("resize", () => {
+    if (isRunning) measure();
+    syncTemporaryFloatingFavicon();
+  });
+  reducedMotionQuery.addEventListener("change", syncTemporaryFloatingFavicon);
+  document.addEventListener("visibilitychange", syncTemporaryFloatingFavicon);
+
+  return { start, stop };
+}
+
 function setActiveInfoMenuAnchor(anchorId) {
   menu2InfoMode.querySelectorAll(".menu2-info-anchor").forEach((button) => {
     const isActive = button.dataset.anchor === anchorId;
@@ -1650,7 +2955,7 @@ function setActiveInfoMenuAnchor(anchorId) {
 }
 
 function getInfoAnchorSections() {
-  return INFO_MENU_ANCHORS
+  return getInfoMenuAnchors()
     .map((anchor) => document.getElementById(anchor.id))
     .filter(Boolean);
 }
@@ -1720,7 +3025,7 @@ function createInfoSectionNav() {
   const nav = document.createElement("div");
   nav.className = "menu2-info-header";
 
-  INFO_MENU_ANCHORS.forEach((anchor) => {
+  getInfoMenuAnchors().forEach((anchor) => {
     const button = document.createElement("button");
     button.className = "menu2-info-anchor";
     button.type = "button";
@@ -1800,7 +3105,8 @@ function activateMenu2Version(version) {
   updateMenu2VersionToggleState();
   metadataPanel.dataset.storyFolder = "";
   metadataPanel.dataset.storyItem = "";
-  currentMenu2V2ProjectKey = null;
+  currentMenu2StoryProjectKey = null;
+  closeMenu2V4Blob();
 
   if (currentMenu2Mode === "slideshow") {
     updateMenu2ForView("slideshow", { animate: false });
@@ -1819,7 +3125,47 @@ function initMenu2VersionToggle() {
   });
 }
 
+function updateVocabAnimationToggleState() {
+  if (!vocabAnimationToggle) return;
+
+  vocabAnimationToggle.querySelectorAll("[data-vocab-version]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.vocabVersion === currentVocabAnimationVersion);
+  });
+}
+
+function restartIntroVocabularyEngine() {
+  const lineElements = Array.from(document.querySelectorAll(".intro-vocabulary-line"));
+  if (!lineElements.length) return;
+
+  if (introVocabularyCleanup) introVocabularyCleanup();
+  introVocabularyCleanup = startIntroVocabularyEngine(lineElements);
+}
+
+function activateVocabAnimationVersion(version) {
+  setVocabAnimationVersion(version);
+  updateVocabAnimationToggleState();
+  restartIntroVocabularyEngine();
+}
+
+function initVocabAnimationToggle() {
+  if (!vocabAnimationToggle) return;
+
+  updateVocabAnimationToggleState();
+  vocabAnimationToggle.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-vocab-version]");
+    if (!button) return;
+
+    activateVocabAnimationVersion(button.dataset.vocabVersion);
+  });
+}
+
 function updateMenu2ForView(view, options = {}) {
+  if (!isFullMode() && view !== "info") {
+    renderTemporaryNotice();
+    setMenu2Mode("slideshow", options);
+    return;
+  }
+
   if (view === "info") {
     setMenu2V1Visible(true);
     renderInfoMenu();
@@ -1839,6 +3185,12 @@ function updateMenu2ForView(view, options = {}) {
     return;
   }
 
+  if (isTemporaryWebsiteActive()) {
+    renderTemporaryNotice();
+    setMenu2Mode("slideshow", options);
+    return;
+  }
+
   buildContactSheet(slideshowAssets, "all");
   setMenu2V1Visible(!isMenu2StoryMode());
   updateMetadataMenu("forward", { animate: false });
@@ -1846,6 +3198,8 @@ function updateMenu2ForView(view, options = {}) {
 }
 
 async function loadLogoManifest() {
+  if (!isFullMode()) return;
+
   try {
     const response = await fetch(LOGO_MANIFEST_URL);
     if (!response.ok) throw new Error(`Logo manifest failed: ${response.status}`);
@@ -1895,6 +3249,7 @@ function goToSlide(index, direction = "next") {
 }
 
 function showRelativeSlide(direction) {
+  if (isTemporaryWebsiteActive()) return;
   const offset = direction === "prev" ? -1 : 1;
   goToSlide(currentIndex + offset, direction);
 }
@@ -1953,6 +3308,7 @@ function startAutoplay(delay = NORMAL_SLIDE_DURATION_MS, options = {}) {
   clearSlideTiming();
 
   if (
+    isTemporaryWebsiteActive() ||
     isSlideshowPaused ||
     slides.length < 2 ||
     slideshow.dataset.animating === "true" ||
@@ -2113,7 +3469,10 @@ function hasOpenOverlay() {
 }
 
 function setSlideshowCursor(event) {
-  if (hasOpenOverlay()) return;
+  if (isTemporaryWebsiteActive() || hasOpenOverlay()) {
+    slideshow.classList.remove("cursor-prev", "cursor-next");
+    return;
+  }
 
   const rect = slideshow.getBoundingClientRect();
   const isPreviousSide = event.clientX - rect.left < rect.width / 2;
@@ -2124,6 +3483,7 @@ function setSlideshowCursor(event) {
 
 function handleSlideshowClick(event) {
   if (event.target.closest(".island-panel") || hasOpenOverlay()) return;
+  if (isTemporaryWebsiteActive()) return;
   if (slideshow.dataset.suppressClick === "true") {
     slideshow.dataset.suppressClick = "false";
     return;
@@ -2137,7 +3497,7 @@ function handleSlideshowClick(event) {
 }
 
 function handleSlideshowPointerDown(event) {
-  if (hasOpenOverlay()) return;
+  if (isTemporaryWebsiteActive() || hasOpenOverlay()) return;
 
   pointerStart = {
     x: event.clientX,
@@ -2176,6 +3536,8 @@ function handleKeydown(event) {
   if (hasOpenOverlay()) {
     return;
   }
+
+  if (isTemporaryWebsiteActive()) return;
 
   if (event.key === "ArrowLeft") {
     showRelativeSlide("prev");
@@ -2375,15 +3737,479 @@ function createPairSlide(asset, index) {
   return slide;
 }
 
+function pickRandomItem(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function normalizeVocabularyData(data) {
+  const fallback = INTRO_VOCABULARY_FALLBACK;
+  const rawVerbs = data?.verbs;
+  const verbList = Array.isArray(rawVerbs) ? rawVerbs : [];
+  const structuredVerbs = rawVerbs && !Array.isArray(rawVerbs) ? rawVerbs : {};
+  const primaryVerbs = structuredVerbs.primary || verbList.filter((verb) => verb === "Navigating");
+  const alternativeVerbs = structuredVerbs.alternative || verbList.filter((verb) => verb !== "Navigating");
+
+  return {
+    firstPhrase: fallback.firstPhrase,
+    verbs: {
+      primary: Array.isArray(primaryVerbs) && primaryVerbs.length ? primaryVerbs : fallback.verbs.primary,
+      alternative: Array.isArray(alternativeVerbs) && alternativeVerbs.length ? alternativeVerbs : fallback.verbs.alternative
+    },
+    adjectives: Array.isArray(data?.adjectives) && data.adjectives.length ? data.adjectives : fallback.adjectives,
+    nouns: Array.isArray(data?.nouns) && data.nouns.length ? data.nouns : fallback.nouns
+  };
+}
+
+function logVocabularyCounts(vocabulary) {
+  const verbCount = new Set(getIntroVocabularyVerbs(vocabulary)).size;
+
+  console.log(`Vocabulary loaded:\nVerbs: ${verbCount}\nAdjectives: ${vocabulary.adjectives.length}\nNouns: ${vocabulary.nouns.length}`);
+}
+
+async function loadIntroVocabulary() {
+  try {
+    const response = await fetch(INTRO_VOCABULARY_URL);
+    if (!response.ok) throw new Error(`Vocabulary failed: ${response.status}`);
+    const vocabulary = normalizeVocabularyData(await response.json());
+    logVocabularyCounts(vocabulary);
+    return vocabulary;
+  } catch (error) {
+    const vocabulary = normalizeVocabularyData(INTRO_VOCABULARY_FALLBACK);
+    logVocabularyCounts(vocabulary);
+    return vocabulary;
+  }
+}
+
+function getIntroVocabularyVerbs(vocabulary) {
+  return [
+    ...vocabulary.verbs.primary,
+    ...vocabulary.verbs.alternative
+  ];
+}
+
+function pickIntroFirstWord(vocabulary, currentWord = "") {
+  const verbs = getIntroVocabularyVerbs(vocabulary);
+  if (!isTemporaryWebsiteActive()) return pickRandomItem(verbs);
+
+  temporaryIntroFirstWordPickCount += 1;
+  if (temporaryIntroFirstWordPickCount % 4 === 0 && currentWord !== "design") return "design";
+
+  const temporaryVerbs = verbs.filter((verb) => verb !== "design");
+  return pickRandomItem(temporaryVerbs.length ? temporaryVerbs : verbs);
+}
+
+function pickIntroAnchorType(recentAnchorTypes = []) {
+  const anchorTypes = ["verb", "adjective", "noun"];
+  const lastType = recentAnchorTypes[recentAnchorTypes.length - 1];
+  const previousType = recentAnchorTypes[recentAnchorTypes.length - 2];
+  const availableTypes = lastType && lastType === previousType
+    ? anchorTypes.filter((type) => type !== lastType)
+    : anchorTypes;
+
+  return pickRandomItem(availableTypes);
+}
+
+function createIntroVocabularyTriple(vocabulary, previousTriple = [], recentAnchorTypes = []) {
+  let triple = [];
+  let anchorType = "free";
+  const verbs = getIntroVocabularyVerbs(vocabulary);
+
+  for (let attempts = 0; attempts < 8; attempts += 1) {
+    const shouldUseAnchor = Math.random() < 0.8;
+
+    if (shouldUseAnchor) {
+      anchorType = pickIntroAnchorType(recentAnchorTypes);
+
+      if (anchorType === "verb") {
+        triple = [
+          "Navigating",
+          pickRandomItem(vocabulary.adjectives),
+          pickRandomItem(vocabulary.nouns)
+        ];
+      } else if (anchorType === "adjective") {
+        triple = [
+          pickIntroFirstWord(vocabulary, previousTriple[0]),
+          "complex",
+          pickRandomItem(vocabulary.nouns)
+        ];
+      } else {
+        triple = [
+          pickIntroFirstWord(vocabulary, previousTriple[0]),
+          pickRandomItem(vocabulary.adjectives),
+          "environments"
+        ];
+      }
+    } else {
+      anchorType = "free";
+      triple = [
+        pickIntroFirstWord(vocabulary, previousTriple[0]),
+        pickRandomItem(vocabulary.adjectives),
+        pickRandomItem(vocabulary.nouns)
+      ];
+    }
+
+    if (triple.join("|") !== previousTriple.join("|")) {
+      return { triple, anchorType };
+    }
+  }
+
+  return {
+    triple: triple.length ? triple : vocabulary.firstPhrase,
+    anchorType
+  };
+}
+
+function getIntroVocabularyPoolForLine(vocabulary, index) {
+  if (index === 0) return getIntroVocabularyVerbs(vocabulary);
+  if (index === 1) return vocabulary.adjectives;
+  return vocabulary.nouns;
+}
+
+function getIntroAnchorLineIndexes(triple) {
+  return [
+    triple[0] === "Navigating" ? 0 : -1,
+    triple[1] === "complex" ? 1 : -1,
+    triple[2] === "environments" ? 2 : -1
+  ].filter((index) => index >= 0);
+}
+
+function getIntroAnchorWordForLine(index) {
+  if (index === 0) return "Navigating";
+  if (index === 1) return "complex";
+  return "environments";
+}
+
+function hasIntroAnchor(triple) {
+  return getIntroAnchorLineIndexes(triple).length > 0;
+}
+
+function createIntroV2AnchorRepair(currentTriple) {
+  const repairableIndexes = [0, 1, 2].filter((index) => currentTriple[index] !== getIntroAnchorWordForLine(index));
+  const lineIndex = pickRandomItem(repairableIndexes);
+
+  return {
+    lineIndex,
+    word: getIntroAnchorWordForLine(lineIndex)
+  };
+}
+
+function createIntroV2RandomWordChange(vocabulary, currentTriple, options = {}) {
+  let lineIndex = options.lineIndex ?? pickRandomItem([0, 1, 2]);
+  let pool = getIntroVocabularyPoolForLine(vocabulary, lineIndex);
+  let availableWords = pool.filter((word) => word && word !== currentTriple[lineIndex]);
+
+  if (lineIndex === 0 && isTemporaryWebsiteActive()) {
+    const word = pickIntroFirstWord(vocabulary, currentTriple[0]);
+    const nextTriple = [...currentTriple];
+    nextTriple[lineIndex] = word;
+    if (word && word !== currentTriple[0] && (!options.requireAnchorAfterChange || hasIntroAnchor(nextTriple))) {
+      return { lineIndex, word };
+    }
+  }
+
+  if (options.requireAnchorAfterChange) {
+    availableWords = availableWords.filter((word) => {
+      const nextTriple = [...currentTriple];
+      nextTriple[lineIndex] = word;
+      return hasIntroAnchor(nextTriple);
+    });
+  }
+
+  if (!availableWords.length) {
+    const fallbackIndexes = [0, 1, 2].filter((index) => index !== lineIndex);
+    for (const fallbackIndex of fallbackIndexes) {
+      pool = getIntroVocabularyPoolForLine(vocabulary, fallbackIndex);
+      availableWords = pool.filter((word) => word && word !== currentTriple[fallbackIndex]);
+
+      if (options.requireAnchorAfterChange) {
+        availableWords = availableWords.filter((word) => {
+          const nextTriple = [...currentTriple];
+          nextTriple[fallbackIndex] = word;
+          return hasIntroAnchor(nextTriple);
+        });
+      }
+
+      if (availableWords.length) {
+        lineIndex = fallbackIndex;
+        break;
+      }
+    }
+  }
+
+  if (!availableWords.length) return null;
+
+  return {
+    lineIndex,
+    word: pickRandomItem(availableWords)
+  };
+}
+
+function createIntroVocabularyWordChange(vocabulary, currentTriple) {
+  if (!hasIntroAnchor(currentTriple)) return createIntroV2AnchorRepair(currentTriple);
+
+  return createIntroV2RandomWordChange(vocabulary, currentTriple, {
+    requireAnchorAfterChange: Math.random() < 0.8
+  });
+}
+
+function isIntroVocabularyBlobMode(version = currentVocabAnimationVersion) {
+  return version === "v3a" || version === "v3b" || version === "v3c";
+}
+
+function getIntroVocabularyWordElement(line) {
+  return line.querySelector(".intro-vocabulary-word") || line;
+}
+
+function renderIntroVocabularyTriple(lineElements, triple) {
+  lineElements.forEach((line, index) => {
+    getIntroVocabularyWordElement(line).textContent = triple[index] || "";
+  });
+}
+
+function transitionIntroVocabularyLine(line, word, index, options = {}) {
+  const wordElement = getIntroVocabularyWordElement(line);
+  const exitClass = index === 1 ? "is-exiting-reverse" : "is-exiting";
+  const enterClass = index === 1 ? "is-entering-reverse" : "is-entering";
+  const duration = options.duration || 520;
+  const stagger = options.stagger ?? index * 140;
+  const swapDelay = Math.max(120, Math.round(duration * 0.72));
+
+  window.setTimeout(() => {
+    wordElement.style.setProperty("--intro-word-transition-duration", `${duration}ms`);
+    wordElement.classList.add(exitClass);
+
+    window.setTimeout(() => {
+      wordElement.textContent = word;
+      wordElement.classList.remove(exitClass);
+      wordElement.classList.add(enterClass);
+      void wordElement.offsetWidth;
+
+      window.requestAnimationFrame(() => {
+        wordElement.classList.remove(enterClass);
+      });
+    }, swapDelay);
+  }, stagger);
+}
+
+function getIntroBlobMorphSettings(mode) {
+  if (mode === "v3b") {
+    return {
+      className: "is-swarm",
+      count: 10 + Math.floor(Math.random() * 11),
+      duration: 600 + Math.floor(Math.random() * 301),
+      spreadX: 1.25,
+      spreadY: 0.48,
+      minSize: 0.12,
+      maxSize: 0.26
+    };
+  }
+
+  if (mode === "v3c") {
+    return {
+      className: "is-island",
+      count: 5 + Math.floor(Math.random() * 8),
+      duration: 500 + Math.floor(Math.random() * 301),
+      spreadX: 0.92,
+      spreadY: 0.34,
+      minSize: 0.2,
+      maxSize: 0.42
+    };
+  }
+
+  return {
+    className: "is-blob",
+    count: 8 + Math.floor(Math.random() * 9),
+    duration: 400 + Math.floor(Math.random() * 301),
+    spreadX: 0.75,
+    spreadY: 0.4,
+    minSize: 0.14,
+    maxSize: 0.32
+  };
+}
+
+function createLogoBlob(index, count, settings) {
+  const blob = document.createElement("span");
+  const progress = count <= 1 ? 0.5 : index / (count - 1);
+  const islandArc = settings.className === "is-island" ? (progress - 0.5) * settings.spreadX : (Math.random() - 0.5) * settings.spreadX;
+  const x = islandArc;
+  const y = settings.className === "is-island"
+    ? (Math.sin(progress * Math.PI * 2) * 0.12) + ((Math.random() - 0.5) * settings.spreadY)
+    : (Math.random() - 0.5) * settings.spreadY;
+  const startX = x * (0.45 + Math.random() * 0.35);
+  const startY = y * (0.45 + Math.random() * 0.35);
+  const endX = x * (0.25 + Math.random() * 0.35);
+  const endY = y * (0.25 + Math.random() * 0.35);
+  const size = settings.minSize + Math.random() * (settings.maxSize - settings.minSize);
+  const rotation = Math.round((Math.random() - 0.5) * 130);
+  const radiusA = 38 + Math.round(Math.random() * 34);
+  const radiusB = 36 + Math.round(Math.random() * 36);
+  const radiusC = 40 + Math.round(Math.random() * 32);
+  const radiusD = 34 + Math.round(Math.random() * 38);
+  const delay = Math.round(Math.random() * 90);
+
+  blob.className = "intro-logo-blob";
+  blob.style.setProperty("--blob-size", `${size}em`);
+  blob.style.setProperty("--blob-radius", `${radiusA}% ${radiusB}% ${radiusC}% ${radiusD}% / ${radiusD}% ${radiusC}% ${radiusA}% ${radiusB}%`);
+  blob.style.setProperty("--blob-x-start", `${startX}em`);
+  blob.style.setProperty("--blob-y-start", `${startY}em`);
+  blob.style.setProperty("--blob-x-mid", `${x}em`);
+  blob.style.setProperty("--blob-y-mid", `${y}em`);
+  blob.style.setProperty("--blob-x-end", `${endX}em`);
+  blob.style.setProperty("--blob-y-end", `${endY}em`);
+  blob.style.setProperty("--blob-rotation", `${rotation}deg`);
+  blob.style.setProperty("--blob-duration", `${settings.duration}ms`);
+  blob.style.setProperty("--blob-delay", `${delay}ms`);
+
+  return blob;
+}
+
+function renderBlobCluster(line, mode) {
+  const settings = getIntroBlobMorphSettings(mode);
+  const cluster = document.createElement("span");
+
+  cluster.className = `intro-blob-cluster ${settings.className}`;
+  cluster.setAttribute("aria-hidden", "true");
+
+  for (let index = 0; index < settings.count; index += 1) {
+    cluster.append(createLogoBlob(index, settings.count, settings));
+  }
+
+  line.append(cluster);
+  window.requestAnimationFrame(() => {
+    cluster.classList.add("is-active");
+  });
+
+  return {
+    cluster,
+    duration: settings.duration + 120
+  };
+}
+
+function transitionIntroVocabularyLineWithBlobs(line, word, mode) {
+  const wordElement = getIntroVocabularyWordElement(line);
+  const { cluster, duration } = renderBlobCluster(line, mode);
+  const swapDelay = Math.round(duration * 0.48);
+
+  line.classList.add("is-blob-morphing");
+
+  window.setTimeout(() => {
+    wordElement.textContent = word;
+  }, swapDelay);
+
+  window.setTimeout(() => {
+    cluster.remove();
+    line.classList.remove("is-blob-morphing");
+  }, duration + 80);
+}
+
+function startIntroVocabularyEngine(lineElements) {
+  if (!lineElements.length) return null;
+
+  let currentTriple = INTRO_VOCABULARY_FALLBACK.firstPhrase;
+  let recentAnchorTypes = [];
+  let timeoutId = 0;
+  let isStopped = false;
+  if (isTemporaryWebsiteActive()) temporaryIntroFirstWordPickCount = 0;
+  renderIntroVocabularyTriple(lineElements, currentTriple);
+
+  if (reducedMotionQuery.matches) return null;
+
+  function scheduleNextV1Phrase(vocabulary) {
+    const delay = 4000 + Math.random() * 1000;
+
+    timeoutId = window.setTimeout(() => {
+      if (currentVocabAnimationVersion !== "v1") {
+        scheduleNextWordChange(vocabulary);
+        return;
+      }
+
+      const nextPhrase = createIntroVocabularyTriple(vocabulary, currentTriple, recentAnchorTypes);
+      currentTriple = nextPhrase.triple;
+      recentAnchorTypes = nextPhrase.anchorType === "free"
+        ? []
+        : [...recentAnchorTypes, nextPhrase.anchorType].slice(-2);
+      currentTriple.forEach((word, index) => {
+        transitionIntroVocabularyLine(lineElements[index], word, index, {
+          duration: 420,
+          stagger: index * 120
+        });
+      });
+
+      if (!isStopped) scheduleNextV1Phrase(vocabulary);
+    }, delay);
+  }
+
+  function scheduleNextWordChange(vocabulary) {
+    const isBlobMode = isIntroVocabularyBlobMode();
+    const delay = isBlobMode ? 1200 : 1000;
+
+    timeoutId = window.setTimeout(() => {
+      if (currentVocabAnimationVersion === "v1") {
+        scheduleNextV1Phrase(vocabulary);
+        return;
+      }
+
+      const activeVersion = currentVocabAnimationVersion;
+      const change = createIntroVocabularyWordChange(vocabulary, currentTriple);
+      if (change) {
+        currentTriple = [...currentTriple];
+        currentTriple[change.lineIndex] = change.word;
+
+        if (isIntroVocabularyBlobMode(activeVersion)) {
+          transitionIntroVocabularyLineWithBlobs(lineElements[change.lineIndex], change.word, activeVersion);
+        } else {
+          transitionIntroVocabularyLine(lineElements[change.lineIndex], change.word, change.lineIndex, {
+            duration: 300,
+            stagger: 0
+          });
+        }
+      }
+
+      if (!isStopped) scheduleNextWordChange(vocabulary);
+    }, delay);
+  }
+
+  loadIntroVocabulary().then((vocabulary) => {
+    if (isStopped) return;
+    if (currentVocabAnimationVersion === "v1") {
+      scheduleNextV1Phrase(vocabulary);
+    } else {
+      scheduleNextWordChange(vocabulary);
+    }
+  });
+
+  return () => {
+    isStopped = true;
+    window.clearTimeout(timeoutId);
+    lineElements.forEach((line) => {
+      line.classList.remove("is-blob-morphing");
+      line.querySelectorAll(".intro-blob-cluster").forEach((cluster) => cluster.remove());
+    });
+  };
+}
+
 function createIntroSlide(asset, index) {
   const slide = document.createElement("article");
   const text = document.createElement("p");
+  const lines = INTRO_VOCABULARY_FALLBACK.firstPhrase.map((word, wordIndex) => {
+    const line = document.createElement("span");
+    const wordElement = document.createElement("span");
+
+    line.className = `intro-vocabulary-line line-${wordIndex + 1}`;
+    wordElement.className = "intro-vocabulary-word";
+    wordElement.textContent = word;
+    line.append(wordElement);
+    return line;
+  });
 
   slide.className = "slideshow-slide slide-intro";
   slide.dataset.assetRole = "intro";
   slide.style.setProperty("--slide-bg", "#000");
   text.className = "intro-slide-text";
-  text.textContent = "supergroup, navigating complex environments";
+  text.append(...lines);
+  if (introVocabularyCleanup) introVocabularyCleanup();
+  introVocabularyCleanup = startIntroVocabularyEngine(lines);
+  slide.vocabularyCleanup = introVocabularyCleanup;
 
   if (index === 0) slide.classList.add("active");
 
@@ -2426,6 +4252,8 @@ function getAssetFilterKey(asset) {
 }
 
 function buildContactSheet(assets, filter = "all") {
+  if (!isFullMode()) return;
+
   contactSheetGrid.textContent = "";
 
   assets
@@ -2496,12 +4324,33 @@ function buildInfoWorkList(assets) {
 }
 
 function syncViewButtons() {
+  if (temporaryInfoButton) {
+    const isInfoView = currentView === "info";
+    temporaryInfoButton.dataset.view = isInfoView ? "slideshow" : "info";
+    temporaryInfoButton.textContent = isInfoView ? "Home" : "Info";
+    temporaryInfoButton.setAttribute("aria-label", isInfoView ? "Go to homepage" : "Show information");
+  }
+
   viewButtons.forEach((button) => {
     const isActive = button.dataset.view === currentView;
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
   updateSlideshowToggleButton();
+}
+
+function handleTemporaryNavPanelClick(event) {
+  if (!isTemporaryWebsiteActive() || event.defaultPrevented) return;
+  if (event.target.closest("a, button, input, select, textarea, [data-no-parent-click]")) return;
+
+  if (currentView === "info") {
+    setView("slideshow", { focus: false, startAutoplay: false });
+    return;
+  }
+
+  if (currentView === "slideshow") {
+    setView("info", { focus: false });
+  }
 }
 
 function triggerLogoTransition() {
@@ -2518,6 +4367,10 @@ function setView(view, options = {}) {
 
   setContactBlobOpen(false);
   currentView = nextView;
+  document.body.classList.toggle("is-slideshow-view", nextView === "slideshow");
+  document.body.classList.toggle("is-info-view", nextView === "info");
+  document.body.classList.toggle("is-grid-view", nextView === "grid");
+  syncTemporaryHomepageEffects();
   if (previousView !== nextView) triggerLogoTransition();
   contactSheetOverlay.classList.toggle("visible", nextView === "grid");
   contactSheetOverlay.setAttribute("aria-hidden", String(nextView !== "grid"));
@@ -2538,6 +4391,7 @@ function setView(view, options = {}) {
   }
 
   isSlideshowPaused = true;
+  if (nextView === "info") ensureTemporaryInfoPageRendered();
   updateMenu2ForView(nextView);
   if (shouldUpdateUrl) updateBrowserUrlForView(nextView);
   updateDisciplineTitle(null, "complex");
@@ -2646,6 +4500,11 @@ function initDraggablePanel(panel, handleSelector, storageKey, fallbackPosition)
 }
 
 function initMenus() {
+  if (isTemporaryWebsiteActive()) {
+    syncViewButtons();
+    return;
+  }
+
   initDraggablePanel(navPanel, ".island-header", NAV_MENU_POSITION_STORAGE_KEY, { left: 24, top: 24 });
   initDraggablePanel(metadataPanel, ".metadata-content", META_MENU_POSITION_STORAGE_KEY, {
     left: 24,
@@ -3076,6 +4935,15 @@ function createFlockingLogoController(container, svg) {
 }
 
 async function initSlideshow() {
+  if (!isFullMode()) {
+    slideshowAssets = [createIntroSlideItem()];
+    slideshow.textContent = "";
+    slideshow.append(createSlide(slideshowAssets[0], 0));
+    slides = Array.from(slideshow.querySelectorAll(".slideshow-slide"));
+    applyTemporaryWebsiteMode();
+    return;
+  }
+
   try {
     const response = await fetch(MANIFEST_URL);
     if (!response.ok) throw new Error(`Manifest failed: ${response.status}`);
@@ -3100,6 +4968,7 @@ async function initSlideshow() {
     buildInfoWorkList(assets);
     updateDocumentBackground();
     updateMetadataMenu("forward", { animate: false });
+
     const initialRoute = parseRouteFromLocation();
     applyRoute(initialRoute, { updateUrl: false });
     if (currentView === "slideshow" && initialRoute.imageSlug) {
@@ -3116,23 +4985,89 @@ async function initSlideshow() {
   }
 }
 
-slideshow.addEventListener("mousemove", setSlideshowCursor);
-slideshow.addEventListener("mouseleave", () => {
-  slideshow.classList.remove("cursor-prev", "cursor-next");
-});
-slideshow.addEventListener("click", handleSlideshowClick);
-slideshow.addEventListener("pointerdown", handleSlideshowPointerDown);
-slideshow.addEventListener("pointerup", handleSlideshowPointerUp);
-slideshow.addEventListener("pointercancel", () => {
-  pointerStart = null;
-});
-document.addEventListener("keydown", handleKeydown);
-document.addEventListener("pointerdown", handleMediaInteraction, { capture: true });
-window.addEventListener("popstate", () => {
-  applyRoute(parseRouteFromLocation(), { updateUrl: false });
-});
+function initFullSiteEventListeners() {
+  if (!isFullMode()) return;
+
+  slideshow.addEventListener("mousemove", setSlideshowCursor);
+  slideshow.addEventListener("mouseleave", () => {
+    slideshow.classList.remove("cursor-prev", "cursor-next");
+  });
+  slideshow.addEventListener("click", handleSlideshowClick);
+  slideshow.addEventListener("pointerdown", handleSlideshowPointerDown);
+  slideshow.addEventListener("pointerup", handleSlideshowPointerUp);
+  slideshow.addEventListener("pointercancel", () => {
+    pointerStart = null;
+  });
+  document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("pointerdown", handleMediaInteraction, { capture: true });
+  window.addEventListener("popstate", () => {
+    applyRoute(parseRouteFromLocation(), { updateUrl: false });
+  });
+
+  slideshowToggle.addEventListener("pointerenter", () => {
+    if (!isSlideshowToggleHoverSuppressed) {
+      slideshowToggle.classList.add("is-icon-hovered");
+    }
+    updateSlideshowToggleButton();
+  });
+  slideshowToggle.addEventListener("pointerleave", () => {
+    isSlideshowToggleHoverSuppressed = false;
+    slideshowToggle.classList.remove("is-icon-hovered");
+    updateSlideshowToggleButton();
+  });
+  slideshowToggle.addEventListener("focus", updateSlideshowToggleButton);
+  slideshowToggle.addEventListener("blur", updateSlideshowToggleButton);
+
+  contactToggle.addEventListener("click", toggleContactBlob);
+  contactSheetClose.addEventListener("click", () => setView("slideshow"));
+  contactSheetGrid.addEventListener("click", (event) => {
+    const thumb = event.target.closest(".contact-sheet-thumb");
+    if (!thumb) return;
+
+    setView("slideshow", { startAutoplay: false, focus: false, updateUrl: false });
+    jumpToSlide(Number(thumb.dataset.slideIndex), CONTACT_SHEET_AUTOPLAY_DELAY);
+  });
+
+  if (infoWorkList) {
+    infoWorkList.addEventListener("click", (event) => {
+      const link = event.target.closest(".info-work-link");
+      if (!link) return;
+
+      event.preventDefault();
+      setView("slideshow", { startAutoplay: false, focus: false, updateUrl: false });
+      jumpToSlide(Number(link.dataset.slideIndex), CONTACT_SHEET_AUTOPLAY_DELAY);
+    });
+  }
+
+  menu2GridMode.addEventListener("click", (event) => {
+    const button = event.target.closest(".menu2-filter-button");
+    if (!button) return;
+    setGridFilter(button.dataset.filter);
+  });
+}
+
+function loadMaterialSymbolsIfNeeded() {
+  if (document.querySelector("link[data-material-symbols]")) return;
+
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = MATERIAL_SYMBOLS_STYLESHEET_URL;
+  link.dataset.materialSymbols = "true";
+  document.head.append(link);
+}
+
+function hydrateFullModeIconAssets() {
+  if (!isFullMode()) return;
+
+  slideshowToggleIcon?.querySelectorAll("img[data-src]").forEach((image) => {
+    if (image.getAttribute("src")) return;
+    image.src = image.dataset.src;
+  });
+}
 
 viewButtons.forEach((button) => {
+  if (isTemporaryWebsiteActive() && button !== temporaryInfoButton) return;
+
   button.addEventListener("click", () => {
     const view = button.dataset.view || "slideshow";
 
@@ -3156,49 +5091,10 @@ viewButtons.forEach((button) => {
   });
 });
 
-slideshowToggle.addEventListener("pointerenter", () => {
-  if (!isSlideshowToggleHoverSuppressed) {
-    slideshowToggle.classList.add("is-icon-hovered");
-  }
-  updateSlideshowToggleButton();
-});
-slideshowToggle.addEventListener("pointerleave", () => {
-  isSlideshowToggleHoverSuppressed = false;
-  slideshowToggle.classList.remove("is-icon-hovered");
-  updateSlideshowToggleButton();
-});
-slideshowToggle.addEventListener("focus", updateSlideshowToggleButton);
-slideshowToggle.addEventListener("blur", updateSlideshowToggleButton);
-
-contactToggle.addEventListener("click", toggleContactBlob);
+navPanel.addEventListener("click", handleTemporaryNavPanelClick);
 homeLogoButton.addEventListener("click", goToHomepage);
 
 aboutClose.addEventListener("click", () => setView("slideshow"));
-contactSheetClose.addEventListener("click", () => setView("slideshow"));
-contactSheetGrid.addEventListener("click", (event) => {
-  const thumb = event.target.closest(".contact-sheet-thumb");
-  if (!thumb) return;
-
-  setView("slideshow", { startAutoplay: false, focus: false, updateUrl: false });
-  jumpToSlide(Number(thumb.dataset.slideIndex), CONTACT_SHEET_AUTOPLAY_DELAY);
-});
-
-if (infoWorkList) {
-  infoWorkList.addEventListener("click", (event) => {
-    const link = event.target.closest(".info-work-link");
-    if (!link) return;
-
-    event.preventDefault();
-    setView("slideshow", { startAutoplay: false, focus: false, updateUrl: false });
-    jumpToSlide(Number(link.dataset.slideIndex), CONTACT_SHEET_AUTOPLAY_DELAY);
-  });
-}
-
-menu2GridMode.addEventListener("click", (event) => {
-  const button = event.target.closest(".menu2-filter-button");
-  if (!button) return;
-  setGridFilter(button.dataset.filter);
-});
 
 menu2InfoMode.addEventListener("click", (event) => {
   const button = event.target.closest(".menu2-info-anchor");
@@ -3215,7 +5111,13 @@ menu2InfoMode.addEventListener("click", (event) => {
 
 initMenus();
 initMenu2VersionToggle();
+initVocabAnimationToggle();
 initFlockingLogo();
-loadLogoManifest();
-loadInfoMarkdown();
+if (isFullMode()) {
+  loadMaterialSymbolsIfNeeded();
+  hydrateFullModeIconAssets();
+  initFullSiteEventListeners();
+  loadLogoManifest();
+  loadInfoMarkdown();
+}
 initSlideshow();
